@@ -5,6 +5,7 @@ The **Timing Drift Simulation Tool** is an **EPICS-based** simulation designed t
 
 This tool provides:
 - A **soft IOC** managing simulated phase drift, environmental conditions, and beam stability.
+  - soft IOC runs in python without needing full EPICS build
 - A **Phoebus GUI** for visualization and manual tuning.
 - A **PID control loop** that dynamically adjusts gains to stabilize phase error.
 - Override modes to allow manual adjustments to PID parameters.

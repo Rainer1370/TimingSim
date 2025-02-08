@@ -91,6 +91,16 @@ phoebus gui.bob
    ```
 3. **Disable Override Mode** to return to auto-adjustment.
 
+## GUI Screenshots
+### **Live Simulation Running:**
+![Timing Live Simulation](bobs/assets/TimingLiveSim.png)
+
+### **Simulation Failure - Beam Dump Triggered:**
+![Timing Simulation Failure](bobs/assets/TimingSimFailure.png)
+
+### **Phoebus GUI Interface:**
+![Timing Simulation GUI](bobs/assets/TimingSimGUI.png)
+
 ## Troubleshooting & FAQs
 **Q: The simulation isn’t updating PV values.**  
 ✅ Ensure the **IOC is running** (`iocPhaseDriftSim.py`)
@@ -106,4 +116,3 @@ This tool is actively being developed for more advanced **timing system correcti
 
 ---
 🚀 **© 2025 Rob Rainer. All Rights Reserved.**
-

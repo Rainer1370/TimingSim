@@ -23,7 +23,7 @@ class PhaseDriftIOC(Driver):
         self.simulation_running = False
         self.initialize_pvs()
         self.write_pv_list()
-        
+
         # Start the environmental factor update loop
         self.env_thread = threading.Thread(target=self.update_environmental_factors, daemon=True)
         self.env_thread.start()
@@ -31,6 +31,11 @@ class PhaseDriftIOC(Driver):
     def initialize_pvs(self):
         """Ensures all PVs are initialized with their default values to prevent disconnections."""
         for pv_name, properties in pvdb.items():
+            if "type" in properties and properties["type"] == "enum":
+                properties["value"] = int(properties["value"])  # Ensure enum values are integers
+            elif pv_name.startswith("PID:"):
+                properties["value"] = 0.0  # Ensure PID gains start at 0
+
             self.setParam(pv_name, properties["value"])
         self.updatePVs()
 
@@ -47,15 +52,19 @@ class PhaseDriftIOC(Driver):
     def update_environmental_factors(self):
         """Continuously updates environmental PVs to simulate real-world fluctuations."""
         while True:
+            temp_lab = self.getParam("TEMP:LAB")
             temp_fiber = self.getParam("TEMP:FIBER")
             vibration_ext = self.getParam("VIBRATION:EXT")
             power_stability = self.getParam("POWER:STABILITY")
 
             # Introduce small fluctuations to simulate environmental changes
-            temp_fiber += np.random.uniform(-0.05, 0.05)
+            temp_lab += np.random.uniform(-0.05, 0.05)  # Fluctuations in lab temp
+            temp_fiber += np.random.uniform(-0.05, 0.05)  # Fluctuations in fiber temp
             vibration_ext = max(0, vibration_ext + np.random.uniform(-0.02, 0.02))
             power_stability = max(0.95, min(1.05, power_stability + np.random.uniform(-0.01, 0.01)))
 
+            # Update PV values
+            self.setParam("TEMP:LAB", temp_lab)
             self.setParam("TEMP:FIBER", temp_fiber)
             self.setParam("VIBRATION:EXT", vibration_ext)
             self.setParam("POWER:STABILITY", power_stability)
@@ -120,7 +129,10 @@ class PhaseDriftIOC(Driver):
         """Restarts the IOC script by executing itself again."""
         print("🔄 Rebooting IOC...")
         self.setParam("IOC:REBOOT", 0)
-        os.execv(sys.executable, ['python'] + sys.argv)
+
+        script_path = os.path.abspath(__file__)  # Get absolute path to the script
+        os.execv(sys.executable, ['python3', script_path])  # Restart with the correct path
+
 
 def main():
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
@@ -131,6 +143,7 @@ def main():
     print("✅ Soft IOC running. Press Ctrl+C to stop.")
     while True:
         server.process(1.0)
+
 
 if __name__ == "__main__":
     main()

@@ -13,9 +13,9 @@
     "PID:Ki": {"type": "float", "value": 0.01, "egu": "1/s"},
     "PID:Kd": {"type": "float", "value": 0.01, "egu": "s"},
 
-    "PID:Kp_MODE": {"type": "enum", "enums": ["Manual", "Auto"], "value": 0},
-    "PID:Ki_MODE": {"type": "enum", "enums": ["Manual", "Auto"], "value": 0},
-    "PID:Kd_MODE": {"type": "enum", "enums": ["Manual", "Auto"], "value": 0},
+    "PID:Kp_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
+    "PID:Ki_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
+    "PID:Kd_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
 
     "PIEZO:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
 

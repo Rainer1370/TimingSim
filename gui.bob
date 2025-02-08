@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-07 19:05:01 by rain-->
+<!--Saved on 2025-02-08 01:00:26 by rain-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
@@ -21,14 +21,6 @@
     <height>275</height>
     <style>2</style>
     <transparent>true</transparent>
-    <widget type="databrowser" version="2.0.0">
-      <name>Environmental Variables</name>
-      <file>plots/env_vars.plt</file>
-      <width>790</width>
-      <height>250</height>
-      <show_toolbar>true</show_toolbar>
-      <tooltip>Plot of all relevant env. vars.</tooltip>
-    </widget>
     <widget type="group" version="3.0.0">
       <name>Group</name>
       <macros>
@@ -140,7 +132,7 @@
           <color red="0" green="0" blue="255">
           </color>
         </foreground_color>
-        <precision>2</precision>
+        <precision>3</precision>
         <horizontal_alignment>2</horizontal_alignment>
       </widget>
       <widget type="label" version="2.0.0">
@@ -181,7 +173,7 @@
           <color name="MINOR" red="255" green="128" blue="0">
           </color>
         </foreground_color>
-        <precision>2</precision>
+        <precision>3</precision>
         <horizontal_alignment>2</horizontal_alignment>
       </widget>
       <widget type="label" version="2.0.0">
@@ -196,6 +188,127 @@
         <width>40</width>
       </widget>
     </widget>
+    <widget type="stripchart" version="2.1.0">
+      <name>Environmental Factors</name>
+      <x>-1</x>
+      <y>-1</y>
+      <width>790</width>
+      <height>250</height>
+      <title>Environmental Factors</title>
+      <start>10 minute</start>
+      <y_axes>
+        <y_axis>
+          <title>TEMP:LAB</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>40.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>TEMP:FIBER</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>40.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="OK" red="0" green="255" blue="0">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>POWER:STABILITY</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>5.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color red="0" green="0" blue="255">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>VIBRATION:EXT</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>5.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="MINOR" red="255" green="128" blue="0">
+            </color>
+          </color>
+        </y_axis>
+      </y_axes>
+      <traces>
+        <trace>
+          <name></name>
+          <y_pv>SIM:TEMP:LAB</y_pv>
+          <axis>0</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:TEMP:FIBER</y_pv>
+          <axis>1</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="On" red="0" green="255" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:POWER:STABILITY</y_pv>
+          <axis>2</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color red="0" green="0" blue="255">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:VIBRATION:EXT</y_pv>
+          <axis>3</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="MINOR" red="255" green="128" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+      </traces>
+    </widget>
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
@@ -205,14 +318,6 @@
     <height>305</height>
     <style>2</style>
     <transparent>true</transparent>
-    <widget type="databrowser" version="2.0.0">
-      <name>PID Gains</name>
-      <file>plots/PID.plt</file>
-      <width>790</width>
-      <height>250</height>
-      <show_toolbar>true</show_toolbar>
-      <tooltip>Plot of all PID Gains</tooltip>
-    </widget>
     <widget type="group" version="3.0.0">
       <name>Group</name>
       <macros>
@@ -366,6 +471,100 @@
         <width>110</width>
       </widget>
     </widget>
+    <widget type="stripchart" version="2.1.0">
+      <name>PID Controls</name>
+      <x>-1</x>
+      <y>-1</y>
+      <width>790</width>
+      <height>250</height>
+      <title>PID Controls</title>
+      <start>10 minute</start>
+      <y_axes>
+        <y_axis>
+          <title>Kp</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>Ki</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="OK" red="0" green="255" blue="0">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>Kd</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color red="0" green="0" blue="255">
+            </color>
+          </color>
+        </y_axis>
+      </y_axes>
+      <traces>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PID:Kp</y_pv>
+          <axis>0</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PID:Ki</y_pv>
+          <axis>1</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="On" red="0" green="255" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PID:Kd</y_pv>
+          <axis>2</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color red="0" green="0" blue="255">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+      </traces>
+    </widget>
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group_6</name>
@@ -375,14 +574,6 @@
     <height>255</height>
     <style>2</style>
     <transparent>true</transparent>
-    <widget type="databrowser" version="2.0.0">
-      <name>Phase Stability Plot</name>
-      <file>plots/phase.plt</file>
-      <width>790</width>
-      <height>229</height>
-      <show_toolbar>true</show_toolbar>
-      <tooltip>Plot of all relevant env. vars.</tooltip>
-    </widget>
     <widget type="group" version="3.0.0">
       <name>Group_7</name>
       <macros>
@@ -550,6 +741,127 @@
         <x>135</x>
         <width>29</width>
       </widget>
+    </widget>
+    <widget type="stripchart" version="2.1.0">
+      <name>Phase Data</name>
+      <x>-1</x>
+      <y>-1</y>
+      <width>790</width>
+      <height>225</height>
+      <title>Phase Correction</title>
+      <start>10 minute</start>
+      <y_axes>
+        <y_axis>
+          <title>PHASE:ERROR</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>PLL:OUT</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="OK" red="0" green="255" blue="0">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>PIEZO:OUT</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color red="0" green="0" blue="255">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>PHASE:CORR</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color name="MINOR" red="255" green="128" blue="0">
+            </color>
+          </color>
+        </y_axis>
+      </y_axes>
+      <traces>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PHASE:ERROR</y_pv>
+          <axis>0</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PLL:OUTPUT</y_pv>
+          <axis>1</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="On" red="0" green="255" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PIEZO:OUTPUT</y_pv>
+          <axis>2</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color red="0" green="0" blue="255">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:PHASE:CORRECTED</y_pv>
+          <axis>3</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="MINOR" red="255" green="128" blue="0">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+      </traces>
     </widget>
   </widget>
   <widget type="label" version="2.0.0">
@@ -723,10 +1035,8 @@
       <rules>
         <rule name="Color Rule" prop_id="fill_color" out_exp="false">
           <exp bool_exp="pv0&gt;=40 || pv0&lt;=-40">
-            <value>
-              <color name="MINOR" red="255" green="128" blue="0">
-              </color>
-            </value>
+            <value>&lt;color blue="0" green="128" name="MINOR" red="255"&gt; 
+              &lt;/color&gt;</value>
           </exp>
           <pv_name>$(pv_name)</pv_name>
         </rule>
@@ -915,6 +1225,62 @@
     <text>Message</text>
     <x>30</x>
     <y>490</y>
+    <width>141</width>
+    <height>15</height>
+    <foreground_color>
+      <color name="Header_ForeGround" red="255" green="255" blue="255">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Header_Background" red="77" green="77" blue="77">
+      </color>
+    </background_color>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="spinner" version="2.0.0">
+    <name>Spinner_3</name>
+    <pv_name>SIM:VIBRATION:EXT</pv_name>
+    <x>30</x>
+    <y>650</y>
+    <width>141</width>
+    <height>30</height>
+    <precision>3</precision>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_27</name>
+    <text>Earthquake...</text>
+    <x>30</x>
+    <y>630</y>
+    <width>141</width>
+    <height>15</height>
+    <foreground_color>
+      <color name="Header_ForeGround" red="255" green="255" blue="255">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Header_Background" red="77" green="77" blue="77">
+      </color>
+    </background_color>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="spinner" version="2.0.0">
+    <name>Spinner_4</name>
+    <pv_name>SIM:POWER:STABILITY</pv_name>
+    <x>30</x>
+    <y>720</y>
+    <width>141</width>
+    <height>30</height>
+    <precision>3</precision>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_28</name>
+    <text>Power Dip...</text>
+    <x>30</x>
+    <y>700</y>
     <width>141</width>
     <height>15</height>
     <foreground_color>

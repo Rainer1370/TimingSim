@@ -1,0 +1,37 @@
+{
+    "PHASE:ERROR": {"type": "float", "value": 0.0, "egu": "fs"},
+    "PHASE:SETPOINT": {"type": "float", "value": 0.0, "egu": "fs"},
+    "PHASE:CORRECTED": {"type": "float", "value": 0.0, "egu": "fs"},
+
+    "PLL:CONTROL": {"type": "float", "value": 0.0, "egu": "V"},
+    "PLL:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
+    "PLL:CENTER": {"type": "float", "value": 0.0, "egu": "V"},
+    "PLL:RANGE": {"type": "float", "value": 50.0, "egu": "fs"},
+
+    "PID:ENABLE": {"type": "enum", "enums": ["Off", "On"], "value": 1},
+    "PID:Kp": {"type": "float", "value": 0.1, "egu": "1"},
+    "PID:Ki": {"type": "float", "value": 0.01, "egu": "1/s"},
+    "PID:Kd": {"type": "float", "value": 0.01, "egu": "s"},
+
+    "PID:Kp_MODE": {"type": "enum", "enums": ["Manual", "Auto"], "value": 0},
+    "PID:Ki_MODE": {"type": "enum", "enums": ["Manual", "Auto"], "value": 0},
+    "PID:Kd_MODE": {"type": "enum", "enums": ["Manual", "Auto"], "value": 0},
+
+    "PIEZO:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
+
+    "TEMP:LAB": {"type": "float", "value": 22.0, "egu": "C"},
+    "TEMP:FIBER": {"type": "float", "value": 22.0, "egu": "C"},
+    "VIBRATION:EXT": {"type": "float", "value": 0.0, "egu": "m/s²"},
+    "POWER:STABILITY": {"type": "float", "value": 1.0, "egu": "%"},
+
+    "BEAM:DUMP": {"type": "enum", "enums": ["On", "Dumped"], "value": 0},
+    "BEAM:RESET": {"type": "enum", "enums": ["No", "Reset"], "value": 0},
+
+    "SIMULATION:START": {"type": "enum", "enums": ["Stopped", "Running"], "value": 0},
+    "IOC:REBOOT": {"type": "enum", "enums": ["Idle", "Reboot"], "value": 0},
+
+    "STATUS:1": {"type": "string", "value": ""},
+    "STATUS:2": {"type": "string", "value": ""},
+    "STATUS:3": {"type": "string", "value": ""},
+    "STATUS:4": {"type": "string", "value": ""}
+}

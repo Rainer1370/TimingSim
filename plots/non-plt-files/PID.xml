@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databrowser>
+    <title>PID Gains Plot</title>
+    <axis_0>Time</axis_0>
+    <axis_1>Gains</axis_1>
+    <trace>
+        <pv>SIM:PID:Kp</pv>
+        <color>red</color>
+        <line>solid</line>
+        <y_axis>1</y_axis>
+    </trace>
+    <trace>
+        <pv>SIM:PID:Ki</pv>
+        <color>green</color>
+        <line>solid</line>
+        <y_axis>1</y_axis>
+    </trace>
+    <trace>
+        <pv>SIM:PID:Kd</pv>
+        <color>blue</color>
+        <line>solid</line>
+        <y_axis>1</y_axis>
+    </trace>
+    <update_rate>1.0</update_rate>
+    <time_span>3600</time_span>
+</databrowser>

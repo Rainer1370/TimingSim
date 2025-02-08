@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<display typeId="org.csstudio.opibuilder.Display" version="3.2.0">
+    <auto_size>true</auto_size>
+    <background_color>
+        <color red="255" green="255" blue="255" />
+    </background_color>
+    <title>Timing System Status</title>
+    <widgets>
+
+        <!-- Live Phase Value -->
+        <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+            <x>20</x>
+            <y>20</y>
+            <width>180</width>
+            <height>40</height>
+            <text>Live Phase:</text>
+            <font>
+                <name>Liberation Sans</name>
+                <height>14</height>
+                <bold>true</bold>
+            </font>
+        </widget>
+        <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+            <x>200</x>
+            <y>20</y>
+            <width>100</width>
+            <height>40</height>
+            <pv_name>SIM:PHASE:ERROR</pv_name>
+            <precision>3</precision>
+            <border_style>LINE</border_style>
+            <foreground_color>
+                <color red="0" green="0" blue="255" />
+            </foreground_color>
+        </widget>
+
+        <!-- Beam Status Indicator -->
+        <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+            <x>20</x>
+            <y>80</y>
+            <width>180</width>
+            <height>40</height>
+            <text>Beam Status:</text>
+            <font>
+                <name>Liberation Sans</name>
+                <height>14</height>
+                <bold>true</bold>
+            </font>
+        </widget>
+        <widget typeId="org.csstudio.opibuilder.widgets.BooleanIndicator" version="1.0">
+            <x>200</x>
+            <y>80</y>
+            <width>100</width>
+            <height>40</height>
+            <pv_name>SIM:BEAM:DUMP</pv_name>
+            <on_label>ON</on_label>
+            <off_label>DUMPED</off_label>
+            <on_color>
+                <color red="0" green="255" blue="0" />
+            </on_color>
+            <off_color>
+                <color red="255" green="0" blue="0" />
+            </off_color>
+        </widget>
+
+        <!-- Beam Reset Button -->
+        <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+            <x>20</x>
+            <y>140</y>
+            <width>200</width>
+            <height>50</height>
+            <text>Reset Beam</text>
+            <pv_name>SIM:BEAM:RESET</pv_name>
+            <actions>
+                <action typeId="org.csstudio.opibuilder.actions.WritePVAction">
+                    <pv>SIM:BEAM:RESET</pv>
+                    <value>1</value>
+                </action>
+            </actions>
+            <foreground_color>
+                <color red="255" green="255" blue="255" />
+            </foreground_color>
+            <background_color>
+                <color red="0" green="0" blue="255" />
+            </background_color>
+        </widget>
+
+    </widgets>
+</display>

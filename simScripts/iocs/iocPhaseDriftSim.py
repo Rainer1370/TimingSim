@@ -17,6 +17,12 @@ pvdb_path = os.path.join(os.path.dirname(__file__), "pvdb.json")
 with open(pvdb_path, "r") as f:
     pvdb = json.load(f)
 
+# Define IOC-specific PVs outside of the "SIM:" namespace
+ioc_pvdb = {
+    "IOC:HEARTBEAT": {"type": "int", "value": 0},
+    "IOC:START_TIME": {"type": "string", "value": ""}
+}
+
 class PhaseDriftIOC(Driver):
     def __init__(self):
         super().__init__()
@@ -24,9 +30,17 @@ class PhaseDriftIOC(Driver):
         self.initialize_pvs()
         self.write_pv_list()
 
-        # Start the environmental factor update loop
+        # Start environmental factor updates
         self.env_thread = threading.Thread(target=self.update_environmental_factors, daemon=True)
         self.env_thread.start()
+
+        # Start the heartbeat PV
+        self.heartbeat_thread = threading.Thread(target=self.heartbeat_pv, daemon=True)
+        self.heartbeat_thread.start()
+
+        # Store IOC Start Time
+        self.setParam("IOC:START_TIME", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        self.updatePVs()
 
     def initialize_pvs(self):
         """Ensures all PVs are initialized with their default values to prevent disconnections."""
@@ -37,6 +51,11 @@ class PhaseDriftIOC(Driver):
                 properties["value"] = 0.0  # Ensure PID gains start at 0
 
             self.setParam(pv_name, properties["value"])
+
+        # Initialize IOC-specific PVs
+        for pv_name, properties in ioc_pvdb.items():
+            self.setParam(pv_name, properties["value"])
+
         self.updatePVs()
 
     def write_pv_list(self):
@@ -47,6 +66,8 @@ class PhaseDriftIOC(Driver):
             f.write(f"# PV List Generated on {timestamp}\n\n")
             for pv_name in pvdb.keys():
                 f.write(f"{prefix}{pv_name}\n")
+            for pv_name in ioc_pvdb.keys():
+                f.write(f"{pv_name}\n")  # Include IOC PVs
         print(f"✅ PV list saved to dbl.txt (Timestamp: {timestamp})")
 
     def update_environmental_factors(self):
@@ -71,6 +92,14 @@ class PhaseDriftIOC(Driver):
 
             self.updatePVs()
             time.sleep(5)  # Update every 5 seconds
+
+    def heartbeat_pv(self):
+        """Updates the heartbeat PV every second, toggling between 0 and 1."""
+        while True:
+            current_heartbeat = self.getParam("IOC:HEARTBEAT")
+            self.setParam("IOC:HEARTBEAT", 1 - current_heartbeat)  # Toggle between 0 and 1
+            self.updatePVs()
+            time.sleep(1)  # 1Hz update rate
 
     def write(self, reason, value):
         """Handles PV updates including simulation control, beam reset, and IOC reboot."""
@@ -137,7 +166,13 @@ class PhaseDriftIOC(Driver):
 def main():
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
     server = SimpleServer()
+
+    # Create PVs with prefix
     server.createPV(prefix, pvdb)
+
+    # Create IOC-specific PVs without prefix
+    server.createPV("", ioc_pvdb)  # No prefix, direct IOC PVs
+
     driver = PhaseDriftIOC()
 
     print("✅ Soft IOC running. Press Ctrl+C to stop.")

@@ -19,15 +19,15 @@
 
     "PIEZO:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
 
-    "TEMP:LAB": {"type": "float", "value": 22.0, "egu": "C"},
-    "TEMP:FIBER": {"type": "float", "value": 22.0, "egu": "C"},
+    "TEMP:LAB": {"type": "float", "value": 22.0, "egu": "°C"},
+    "TEMP:FIBER": {"type": "float", "value": 22.0, "egu": "°C"},
     "VIBRATION:EXT": {"type": "float", "value": 0.0, "egu": "m/s²"},
     "POWER:STABILITY": {"type": "float", "value": 1.0, "egu": "%"},
 
     "BEAM:DUMP": {"type": "enum", "enums": ["On", "Dumped"], "value": 0},
     "BEAM:RESET": {"type": "enum", "enums": ["No", "Reset"], "value": 0},
 
-    "SIMULATION:START": {"type": "enum", "enums": ["Stopped", "Running"], "value": 0},
+    "START": {"type": "enum", "enums": ["Stop", "Start"], "value": 0},
     "IOC:REBOOT": {"type": "enum", "enums": ["Idle", "Reboot"], "value": 0},
 
     "STATUS:1": {"type": "string", "value": ""},

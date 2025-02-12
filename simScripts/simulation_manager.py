@@ -1,16 +1,15 @@
 import subprocess
-import signal
 import os
-import sys
 import time
+from datetime import datetime
 from epics import PV
 
-# EPICS PVs for control
-sim_start_pv = PV("SIM:SIMULATION:START")
+# EPICS PVs for status updates
 beam_dump_pv = PV("SIM:BEAM:DUMP")
-beam_reset_pv = PV("SIM:BEAM:RESET")
+message1 = PV("SIM:STATUS:1")
+message2 = PV("SIM:STATUS:2")
 
-# Get the absolute path to `simScripts/` directory
+# Get the absolute path to the script directory
 script_dir = os.path.abspath(os.path.dirname(__file__))
 
 # Track subprocesses
@@ -20,69 +19,60 @@ def start_simulation():
     """Start phase simulation and PID control as subprocesses."""
     global processes
     if processes:
-        print("🚀 Simulation is already running.")
-        return
+        message1.put("Simulation already started")
+        return  # Already running
 
-    print("🚀 Starting Simulation Manager...")
-
-    # Start the subprocesses with absolute paths
-    phase_proc = subprocess.Popen(["python", os.path.join(script_dir, "phase_sim.py")])
-    pid_proc = subprocess.Popen(["python", os.path.join(script_dir, "pid_control.py")])
-
+    print("🚀 Starting Simulation...")
+    phase_proc = subprocess.Popen(["python3", os.path.join(script_dir, "phase_sim.py")])
+    pid_proc = subprocess.Popen(["python3", os.path.join(script_dir, "pid_control.py")])
     processes = [phase_proc, pid_proc]
 
-    print("✅ Phase Simulation and PID Control started.")
+    message1.put("Simulation Started at:")
+    message2.put(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    print("✅ Simulation started.")
 
-def stop_simulation():
-    """Stops all simulation processes."""
+def pause_simulation():
+    """Pauses the simulation when the beam dumps."""
     global processes
     if not processes:
-        print("🛑 Simulation already stopped. No action taken.")
-        return
+        return  # Nothing to stop
 
-    print("🛑 Stopping Simulation...")
-    
-    # Kill all subprocesses
+    print("🚨 Beam Dump detected. Pausing simulation.")
+
     for proc in processes:
         proc.terminate()
     for proc in processes:
-        proc.wait()  # Ensures they fully stop before resetting
+        proc.wait()
 
     processes = []
-    print("✅ All simulation processes stopped.")
 
-def monitor_simulation():
-    """Monitors PVs and manages simulation state."""
+    message1.put("Simulation Paused at:")
+    message2.put(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    print("✅ Simulation paused due to beam dump.")
+
+def monitor_beam_dump():
+    """Monitors beam dump PV and manages simulation state."""
+    beam_dumped = False  # Track beam dump state
+
     while True:
-        sim_status = sim_start_pv.get()
         beam_status = beam_dump_pv.get()
 
-        if sim_status == 1 and not processes:
+        if beam_status == 1 and not beam_dumped:
+            pause_simulation()
+            beam_dumped = True  # Prevent repeat calls
+
+        if beam_status == 0 and beam_dumped:
+            print("🔄 Beam Dump cleared. Restarting simulation.")
+
+            message1.put("Simulation Restarted at:")
+            message2.put(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
             start_simulation()
-
-        if sim_status == 0 and processes:
-            stop_simulation()
-
-        if beam_status == 1:  # Beam dumped, stop everything
-            print("🚨 Beam Dump detected. Stopping simulation.")
-            stop_simulation()
-
-        if beam_reset_pv.get() == 1 and not processes:
-            print("🔄 Beam Reset detected. Restarting simulation.")
-            start_simulation()
+            beam_dumped = False  # Reset flag
 
         time.sleep(1)  # Prevent CPU overuse
 
-def handle_exit(signum, frame):
-    """Ensure clean shutdown on exit signals."""
-    print("🔄 Exiting Simulation Manager...")
-    stop_simulation()
-    sys.exit(0)
-
-# Handle termination signals
-signal.signal(signal.SIGINT, handle_exit)
-signal.signal(signal.SIGTERM, handle_exit)
-
 if __name__ == "__main__":
-    print("✅ Simulation Manager Running. Waiting for Start Signal...")
-    monitor_simulation()
+    print("✅ Simulation Manager Running. Monitoring Beam Dump...")
+    start_simulation()  # Initial startup message
+    monitor_beam_dump()

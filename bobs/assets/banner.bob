@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-09 10:32:24 by rain-->
+<!--Saved on 2025-02-12 01:48:11 by rain-->
 <display version="2.0.0">
   <name>Banner</name>
   <width>1000</width>
@@ -10,25 +10,18 @@
   </background_color>
   <widget type="label" version="2.0.0">
     <name>Label</name>
-    <class>TITLE</class>
     <text>$(TITLE)</text>
-    <x use_class="true">0</x>
-    <y use_class="true">0</y>
     <width>1000</width>
     <height>40</height>
-    <font use_class="true">
-      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="24.0">
       </font>
     </font>
-    <foreground_color use_class="true">
-      <color name="Text" red="0" green="0" blue="0">
-      </color>
-    </foreground_color>
     <background_color>
-      <color red="153" green="128" blue="230">
+      <color name="Write_Background" red="128" green="255" blue="255">
       </color>
     </background_color>
-    <transparent use_class="true">true</transparent>
+    <transparent>false</transparent>
     <horizontal_alignment>1</horizontal_alignment>
     <vertical_alignment>1</vertical_alignment>
   </widget>

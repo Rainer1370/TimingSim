@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-09 10:34:54 by rain-->
+<!--Saved on 2025-02-12 02:14:07 by rain-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
@@ -7,16 +7,14 @@
   </macros>
   <width>1000</width>
   <height>875</height>
-  <widget type="embedded" version="2.0.0">
-    <name>Embedded Display</name>
-    <file>assets/banner.bob</file>
-    <width>1000</width>
-    <height>40</height>
-  </widget>
+  <background_color>
+    <color name="Grid" red="128" green="128" blue="128">
+    </color>
+  </background_color>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>208</x>
-    <y>320</y>
+    <x>210</x>
+    <y>322</y>
     <width>792</width>
     <height>280</height>
     <style>2</style>
@@ -142,7 +140,7 @@
     </widget>
     <widget type="group" version="3.0.0">
       <name>Group_17</name>
-      <y>250</y>
+      <y>253</y>
       <width>790</width>
       <height>22</height>
       <style>3</style>
@@ -193,7 +191,7 @@
           <vertical_alignment>1</vertical_alignment>
         </widget>
         <widget type="label" version="2.0.0">
-          <name>Label_37</name>
+          <name>Label_45</name>
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
@@ -336,7 +334,7 @@
         <widget type="textupdate" version="2.0.0">
           <name>Text Update_23</name>
           <pv_name>$(PV)</pv_name>
-          <x>110</x>
+          <x>83</x>
           <width>50</width>
           <font>
             <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
@@ -357,8 +355,8 @@
         <widget type="label" version="2.0.0">
           <name>Label_43</name>
           <text>$(U)</text>
-          <x>160</x>
-          <width>20</width>
+          <x>135</x>
+          <width>40</width>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -367,10 +365,10 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>208</x>
-    <y>600</y>
+    <x>210</x>
+    <y>602</y>
     <width>792</width>
-    <height>275</height>
+    <height>273</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="stripchart" version="2.1.0">
@@ -654,8 +652,8 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group_6</name>
-    <x>208</x>
-    <y>40</y>
+    <x>210</x>
+    <y>42</y>
     <width>792</width>
     <height>280</height>
     <style>2</style>
@@ -781,8 +779,8 @@
     </widget>
     <widget type="group" version="3.0.0">
       <name>Group</name>
-      <y>250</y>
-      <width>790</width>
+      <y>253</y>
+      <width>785</width>
       <height>22</height>
       <style>3</style>
       <transparent>true</transparent>
@@ -1015,18 +1013,8 @@
     </actions>
     <pv_name>SIM:BEAM:RESET</pv_name>
     <x>10</x>
-    <y>110</y>
+    <y>105</y>
     <width>190</width>
-  </widget>
-  <widget type="bool_button" version="2.0.0">
-    <name>Boolean Button</name>
-    <pv_name>SIM:SIMULATION:START</pv_name>
-    <x>10</x>
-    <y>180</y>
-    <width>190</width>
-    <off_label>Start Simulation</off_label>
-    <on_label>Stop Simulation</on_label>
-    <show_led>false</show_led>
   </widget>
   <widget type="action_button" version="3.0.0">
     <name>Action Button_3</name>
@@ -1039,7 +1027,7 @@
     </actions>
     <pv_name>SIM:BEAM:DUMP</pv_name>
     <x>10</x>
-    <y>145</y>
+    <y>140</y>
     <width>190</width>
     <font>
       <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
@@ -1055,34 +1043,6 @@
     </background_color>
     <show_confirm_dialog>true</show_confirm_dialog>
     <confirm_message>Do you want to dump the beam?</confirm_message>
-  </widget>
-  <widget type="action_button" version="3.0.0">
-    <name>Action Button_4</name>
-    <actions>
-      <action type="write_pv">
-        <description>Reboot IOC</description>
-        <pv_name>$(pv_name)</pv_name>
-        <value>1</value>
-      </action>
-    </actions>
-    <pv_name>SIM:IOC:REBOOT</pv_name>
-    <x>10</x>
-    <y>839</y>
-    <width>190</width>
-    <font>
-      <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-      </font>
-    </font>
-    <foreground_color>
-      <color name="Header_ForeGround" red="255" green="255" blue="255">
-      </color>
-    </foreground_color>
-    <background_color>
-      <color name="INVALID" red="255" green="0" blue="255">
-      </color>
-    </background_color>
-    <show_confirm_dialog>true</show_confirm_dialog>
-    <confirm_message>Do you want to reboot the IOC?</confirm_message>
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
@@ -1287,7 +1247,8 @@
       <text>Phase Window (fs)</text>
       <y>74</y>
       <width>190</width>
-      <height>15</height>
+      <height>18</height>
+      <transparent>false</transparent>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="group" version="3.0.0">
@@ -1299,7 +1260,6 @@
         <color red="0" green="0" blue="255">
         </color>
       </foreground_color>
-      <transparent>true</transparent>
       <widget type="textupdate" version="2.0.0">
         <name>Text Update_12</name>
         <pv_name>SIM:PHASE:ERROR</pv_name>
@@ -1461,20 +1421,22 @@
     <x>20</x>
     <y>50</y>
     <width>172</width>
-    <height>52</height>
+    <height>47</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Beam Status</text>
       <width>170</width>
+      <height>15</height>
+      <transparent>false</transparent>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>SIM:BEAM:DUMP</pv_name>
-      <y>20</y>
+      <y>15</y>
       <width>170</width>
       <height>30</height>
       <off_label>Enabled</off_label>
@@ -1565,6 +1527,7 @@
       <pv_name>SIM:STATUS:4</pv_name>
       <y>75</y>
       <width>188</width>
+      <height>23</height>
       <foreground_color>
         <color red="128" green="0" blue="200">
         </color>
@@ -1579,8 +1542,8 @@
   <widget type="textupdate" version="2.0.0">
     <name>Text Update_24</name>
     <pv_name>IOC:START_TIME</pv_name>
-    <x>11</x>
-    <y>810</y>
+    <x>10</x>
+    <y>850</y>
     <width>188</width>
     <background_color>
       <color name="Button_Background" red="210" green="210" blue="210">
@@ -1591,9 +1554,186 @@
   <widget type="label" version="2.0.0">
     <name>Label_44</name>
     <text>IOC Runnning since</text>
-    <x>11</x>
-    <y>790</y>
+    <x>10</x>
+    <y>830</y>
     <width>188</width>
+    <transparent>false</transparent>
     <horizontal_alignment>1</horizontal_alignment>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <width>1002</width>
+    <height>42</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display</name>
+      <file>assets/banner.bob</file>
+      <width>1000</width>
+      <height>40</height>
+      <resize>1</resize>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <x>10</x>
+    <y>174</y>
+    <width>190</width>
+    <height>38</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Label_1</name>
+      <text>Simulation Status</text>
+      <width>188</width>
+      <height>15</height>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>Action Button_1</name>
+      <actions>
+        <action type="write_pv">
+          <description>Start</description>
+          <pv_name>$(pv_name)</pv_name>
+          <value>1</value>
+        </action>
+      </actions>
+      <pv_name>SIM:START</pv_name>
+      <y>17</y>
+      <width>95</width>
+      <height>18</height>
+      <rules>
+        <rule name="Text Rule" prop_id="text" out_exp="false">
+          <exp bool_exp="pv0==1">
+            <value>Started</value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+        <rule name="Color Rule" prop_id="background_color" out_exp="false">
+          <exp bool_exp="pv0==1">
+            <value>
+              <color name="On" red="0" green="255" blue="0">
+              </color>
+            </value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+      </rules>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>Action Button_2</name>
+      <actions>
+        <action type="write_pv">
+          <description>Stop</description>
+          <pv_name>$(pv_name)</pv_name>
+          <value>0</value>
+        </action>
+      </actions>
+      <pv_name>SIM:START</pv_name>
+      <x>95</x>
+      <y>17</y>
+      <width>93</width>
+      <height>18</height>
+      <rules>
+        <rule name="Text Rule" prop_id="text" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>Stopped</value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+        <rule name="Color Rule" prop_id="background_color" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>
+              <color name="Off" red="60" green="100" blue="60">
+              </color>
+            </value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+      </rules>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_2</name>
+    <x>10</x>
+    <y>790</y>
+    <width>190</width>
+    <height>38</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Label_47</name>
+      <text>IOC Controls</text>
+      <width>188</width>
+      <height>15</height>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>Action Button_7</name>
+      <actions>
+        <action type="write_pv">
+          <description>Start</description>
+          <pv_name>$(pv_name)</pv_name>
+          <value>1</value>
+        </action>
+      </actions>
+      <pv_name>IOC:START</pv_name>
+      <y>17</y>
+      <width>95</width>
+      <height>18</height>
+      <rules>
+        <rule name="Text Rule" prop_id="text" out_exp="false">
+          <exp bool_exp="pv0==1">
+            <value>Started</value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+        <rule name="Color Rule" prop_id="background_color" out_exp="false">
+          <exp bool_exp="pv0==1">
+            <value>
+              <color name="On" red="0" green="255" blue="0">
+              </color>
+            </value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+      </rules>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>Action Button_8</name>
+      <actions>
+        <action type="write_pv">
+          <description>Stop</description>
+          <pv_name>$(pv_name)</pv_name>
+          <value>0</value>
+        </action>
+      </actions>
+      <pv_name>IOC:START</pv_name>
+      <x>95</x>
+      <y>17</y>
+      <width>93</width>
+      <height>18</height>
+      <rules>
+        <rule name="Text Rule" prop_id="text" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>Stopped</value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+        <rule name="Color Rule" prop_id="background_color" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>
+              <color name="Off" red="60" green="100" blue="60">
+              </color>
+            </value>
+          </exp>
+          <pv_name>$(pv_name)</pv_name>
+        </rule>
+      </rules>
+    </widget>
   </widget>
 </display>

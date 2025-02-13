@@ -37,6 +37,9 @@ class IOCStarter(Driver):
         """Stop iocPhaseDriftSim.py by killing the process."""
 #        print("🛑 Stopping IOC...")
         subprocess.call(["pkill", "-f", "iocPhaseDriftSim.py"])
+        subprocess.call(["pkill", "-f", "phase_sim.py"])
+        subprocess.call(["pkill", "-f", "pid_control.py"])
+        subprocess.call(["pkill", "-f", "simulation_manager.py"])
         self.ioc_process = None
         self.setParam("STATUS", "IOC Stopped")
         self.setParam("START", 0)

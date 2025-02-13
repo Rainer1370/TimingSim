@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-12 02:14:07 by rain-->
+<!--Saved on 2025-02-13 06:43:22 by rain-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
     <TITLE>Timing Drift Simulation Tool</TITLE>
   </macros>
-  <width>1000</width>
+  <width>1225</width>
   <height>875</height>
   <background_color>
     <color name="Grid" red="128" green="128" blue="128">
@@ -195,6 +195,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -249,6 +250,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -303,6 +305,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -357,6 +360,7 @@
           <text>$(U)</text>
           <x>135</x>
           <width>40</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -834,6 +838,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -888,6 +893,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -942,6 +948,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -996,6 +1003,7 @@
           <text>$(U)</text>
           <x>160</x>
           <width>20</width>
+          <transparent>false</transparent>
           <horizontal_alignment>1</horizontal_alignment>
           <vertical_alignment>1</vertical_alignment>
         </widget>
@@ -1004,14 +1012,20 @@
   </widget>
   <widget type="action_button" version="3.0.0">
     <name>Action Button</name>
-    <actions>
+    <actions execute_as_one="true">
       <action type="write_pv">
         <description>Beam Reset</description>
         <pv_name>$(pv_name)</pv_name>
         <value>1</value>
       </action>
+      <action type="write_pv">
+        <description>Simulation Reset</description>
+        <pv_name>SIM:RESET</pv_name>
+        <value>1</value>
+      </action>
     </actions>
     <pv_name>SIM:BEAM:RESET</pv_name>
+    <text>Beam Reset</text>
     <x>10</x>
     <y>105</y>
     <width>190</width>
@@ -1046,167 +1060,9 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>10</x>
-    <y>321</y>
+    <x>1015</x>
+    <y>45</y>
     <width>190</width>
-    <height>102</height>
-    <style>2</style>
-    <background_color>
-      <color name="Button_Background" red="210" green="210" blue="210">
-      </color>
-    </background_color>
-    <transparent>true</transparent>
-    <widget type="textupdate" version="2.0.0">
-      <name>Text Update</name>
-      <pv_name>SIM:PHASE:SETPOINT</pv_name>
-      <x>138</x>
-      <y>16</y>
-      <width>50</width>
-      <foreground_color>
-        <color name="Write_Background" red="128" green="255" blue="255">
-        </color>
-      </foreground_color>
-      <background_color>
-        <color name="Grid" red="128" green="128" blue="128">
-        </color>
-      </background_color>
-      <precision>2</precision>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label_15</name>
-      <text>PHASE:</text>
-      <y>16</y>
-      <width>140</width>
-      <height>21</height>
-      <background_color>
-        <color name="Write_Background" red="128" green="255" blue="255">
-        </color>
-      </background_color>
-      <transparent>false</transparent>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>Text Update_1</name>
-      <pv_name>SIM:PLL:CENTER</pv_name>
-      <x>138</x>
-      <y>37</y>
-      <width>50</width>
-      <foreground_color>
-        <color red="255" green="255" blue="130">
-        </color>
-      </foreground_color>
-      <background_color>
-        <color name="Grid" red="128" green="128" blue="128">
-        </color>
-      </background_color>
-      <precision>2</precision>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label_20</name>
-      <text>PLL Center:</text>
-      <y>37</y>
-      <width>140</width>
-      <height>21</height>
-      <background_color>
-        <color red="255" green="255" blue="130">
-        </color>
-      </background_color>
-      <transparent>false</transparent>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>Text Update_8</name>
-      <pv_name>SIM:PLL:OUTPUT</pv_name>
-      <x>138</x>
-      <y>58</y>
-      <width>50</width>
-      <foreground_color>
-        <color red="255" green="160" blue="210">
-        </color>
-      </foreground_color>
-      <background_color>
-        <color name="Grid" red="128" green="128" blue="128">
-        </color>
-      </background_color>
-      <precision>2</precision>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label_21</name>
-      <text>PLL Output:</text>
-      <y>58</y>
-      <width>140</width>
-      <height>21</height>
-      <background_color>
-        <color red="255" green="160" blue="210">
-        </color>
-      </background_color>
-      <transparent>false</transparent>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>Text Update_11</name>
-      <pv_name>SIM:PIEZO:OUTPUT</pv_name>
-      <x>138</x>
-      <y>79</y>
-      <width>50</width>
-      <foreground_color>
-        <color red="160" green="255" blue="160">
-        </color>
-      </foreground_color>
-      <background_color>
-        <color name="Grid" red="128" green="128" blue="128">
-        </color>
-      </background_color>
-      <precision>2</precision>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label_22</name>
-      <text>PIEZO Output:</text>
-      <y>79</y>
-      <width>140</width>
-      <height>21</height>
-      <background_color>
-        <color red="160" green="255" blue="160">
-        </color>
-      </background_color>
-      <transparent>false</transparent>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label_25</name>
-      <text>Laser Data</text>
-      <width>188</width>
-      <height>15</height>
-      <foreground_color>
-        <color name="Header_ForeGround" red="255" green="255" blue="255">
-        </color>
-      </foreground_color>
-      <background_color>
-        <color name="Header_Background" red="77" green="77" blue="77">
-        </color>
-      </background_color>
-      <transparent>false</transparent>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-  </widget>
-  <widget type="group" version="3.0.0">
-    <name>Group</name>
-    <x>10</x>
-    <y>220</y>
-    <width>192</width>
     <height>95</height>
     <style>2</style>
     <transparent>true</transparent>
@@ -1214,7 +1070,7 @@
       <name>Tank</name>
       <pv_name>SIM:PHASE:ERROR</pv_name>
       <y>25</y>
-      <width>190</width>
+      <width>188</width>
       <height>49</height>
       <horizontal>true</horizontal>
       <rules>
@@ -1246,7 +1102,7 @@
       <name>Label_14</name>
       <text>Phase Window (fs)</text>
       <y>74</y>
-      <width>190</width>
+      <width>188</width>
       <height>18</height>
       <transparent>false</transparent>
       <horizontal_alignment>1</horizontal_alignment>
@@ -1310,10 +1166,10 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>10</x>
-    <y>500</y>
+    <x>11</x>
+    <y>362</y>
     <width>190</width>
-    <height>47</height>
+    <height>37</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="spinner" version="2.0.0">
@@ -1321,7 +1177,6 @@
       <pv_name>SIM:POWER:STABILITY</pv_name>
       <y>15</y>
       <width>188</width>
-      <height>30</height>
       <precision>3</precision>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
@@ -1346,10 +1201,10 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>10</x>
-    <y>450</y>
+    <x>11</x>
+    <y>322</y>
     <width>190</width>
-    <height>47</height>
+    <height>37</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="spinner" version="2.0.0">
@@ -1357,7 +1212,6 @@
       <pv_name>SIM:VIBRATION:EXT</pv_name>
       <y>15</y>
       <width>188</width>
-      <height>30</height>
       <precision>3</precision>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
@@ -1382,10 +1236,10 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group_9</name>
-    <x>10</x>
-    <y>550</y>
+    <x>11</x>
+    <y>402</y>
     <width>190</width>
-    <height>47</height>
+    <height>37</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="spinner" version="2.0.0">
@@ -1393,7 +1247,6 @@
       <pv_name>SIM:TEMP:LAB</pv_name>
       <y>15</y>
       <width>188</width>
-      <height>30</height>
       <precision>3</precision>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
@@ -1454,8 +1307,8 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>10</x>
-    <y>601</y>
+    <x>11</x>
+    <y>215</y>
     <width>190</width>
     <height>100</height>
     <style>2</style>
@@ -1569,7 +1422,7 @@
     <widget type="embedded" version="2.0.0">
       <name>Embedded Display</name>
       <file>assets/banner.bob</file>
-      <width>1000</width>
+      <width>1225</width>
       <height>40</height>
       <resize>1</resize>
     </widget>
@@ -1734,6 +1587,681 @@
           <pv_name>$(pv_name)</pv_name>
         </rule>
       </rules>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <x>1015</x>
+    <y>144</y>
+    <width>190</width>
+    <height>158</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Label_25</name>
+      <text>Laser Data</text>
+      <width>188</width>
+      <height>15</height>
+      <foreground_color>
+        <color name="Header_ForeGround" red="255" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Header_Background" red="77" green="77" blue="77">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update</name>
+      <pv_name>SIM:PHASE:DRIFT</pv_name>
+      <x>138</x>
+      <y>56</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_15</name>
+      <text>PHASE:DRIFT</text>
+      <y>56</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_1</name>
+      <pv_name>SIM:PHASE:READBACK</pv_name>
+      <x>138</x>
+      <y>36</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_20</name>
+      <text>PHASE:READBACK</text>
+      <y>36</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_8</name>
+      <pv_name>SIM:PIEZO:OUTPUT</pv_name>
+      <x>138</x>
+      <y>116</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="160" blue="210">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_21</name>
+      <text>PIEZO:OUTPUT</text>
+      <y>116</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="160" blue="210">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_11</name>
+      <pv_name>SIM:PHASE:DRIFT_RATE</pv_name>
+      <x>138</x>
+      <y>76</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_22</name>
+      <text>PHASE:DRIFT:RATE</text>
+      <y>76</y>
+      <width>138</width>
+      <background_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_48</name>
+      <text>PLL:OUTPUT</text>
+      <y>96</y>
+      <width>138</width>
+      <background_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_3</name>
+      <pv_name>SIM:PLL:OUTPUT</pv_name>
+      <x>138</x>
+      <y>96</y>
+      <width>50</width>
+      <foreground_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_50</name>
+      <text>PHASE:SETPOINT</text>
+      <y>16</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_4</name>
+      <pv_name>SIM:PHASE:SETPOINT</pv_name>
+      <x>138</x>
+      <y>16</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_9</name>
+      <pv_name>SIM:PLL:LOCK_STATUS</pv_name>
+      <x>138</x>
+      <y>136</y>
+      <width>50</width>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_51</name>
+      <text>PLL:LOCK:STATUS</text>
+      <y>136</y>
+      <width>138</width>
+      <background_color>
+        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_3</name>
+    <x>1015</x>
+    <y>322</y>
+    <width>190</width>
+    <height>47</height>
+    <style>2</style>
+    <background_color>
+      <color name="Header_Background" red="77" green="77" blue="77">
+      </color>
+    </background_color>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_8</name>
+      <pv_name>SIM:PHASE:SETPOINT</pv_name>
+      <y>25</y>
+      <width>188</width>
+      <precision>3</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+      <rules>
+        <rule name="Enable Rule" prop_id="enabled" out_exp="false">
+          <exp bool_exp="pv0==1">
+            <value>true</value>
+          </exp>
+          <pv_name>loc://PHASE:OVERRIDE</pv_name>
+        </rule>
+      </rules>
+      <enabled>false</enabled>
+    </widget>
+    <widget type="checkbox" version="2.0.0">
+      <name>Check Box_1</name>
+      <pv_name>loc://PHASE:OVERRIDE(0)</pv_name>
+      <label>MANUALLY SET PHASE</label>
+      <x>2</x>
+      <width>186</width>
+      <height>25</height>
+      <foreground_color>
+        <color name="Header_ForeGround" red="255" green="255" blue="255">
+        </color>
+      </foreground_color>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_4</name>
+    <x>1015</x>
+    <y>450</y>
+    <width>190</width>
+    <height>138</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Label_52</name>
+      <text>Master Oscillator Data</text>
+      <width>188</width>
+      <height>15</height>
+      <foreground_color>
+        <color name="Header_ForeGround" red="255" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Header_Background" red="77" green="77" blue="77">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_10</name>
+      <pv_name>SIM:MO:PHASE</pv_name>
+      <x>138</x>
+      <y>76</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_53</name>
+      <text>MO:PHASE</text>
+      <y>76</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_25</name>
+      <pv_name>SIM:MO:FREQ_DRIFT</pv_name>
+      <x>138</x>
+      <y>56</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_54</name>
+      <text>MO:FREQ:DRIFT</text>
+      <y>56</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_27</name>
+      <pv_name>SIM:MO:PHASE_CORRECTION</pv_name>
+      <x>138</x>
+      <y>96</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_56</name>
+      <text>MO:PHASE:CORR.</text>
+      <y>96</y>
+      <width>138</width>
+      <background_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_57</name>
+      <text>MO:LOCK:STATUS</text>
+      <y>116</y>
+      <width>138</width>
+      <background_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_28</name>
+      <pv_name>SIM:MO:LOCK_STATUS</pv_name>
+      <x>138</x>
+      <y>116</y>
+      <width>50</width>
+      <foreground_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_58</name>
+      <text>MO:FREQUENCY</text>
+      <y>16</y>
+      <width>188</width>
+      <background_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_29</name>
+      <pv_name>SIM:MO:FREQ</pv_name>
+      <y>36</y>
+      <width>168</width>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>2</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_60</name>
+      <text>Hz</text>
+      <x>168</x>
+      <y>36</y>
+      <width>20</width>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <x>1015</x>
+    <y>602</y>
+    <width>192</width>
+    <height>202</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Label_59</name>
+      <text>FIBER:TEMP (fs/C)</text>
+      <y>80</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_61</name>
+      <text>LAB:TEMP (fs/C)</text>
+      <y>50</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_62</name>
+      <text>VIBRATION (fs/u)</text>
+      <y>110</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_63</name>
+      <text>MO:TEMP (fs/C)</text>
+      <y>140</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_64</name>
+      <text>POWER (fs/%)</text>
+      <y>20</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_67</name>
+      <text>PIEZO</text>
+      <y>170</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="160" blue="210">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_1</name>
+      <pv_name>SIM:SENS:FIBER</pv_name>
+      <x>125</x>
+      <y>80</y>
+      <width>65</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </background_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_2</name>
+      <pv_name>SIM:SENS:TEMP</pv_name>
+      <x>125</x>
+      <y>50</y>
+      <width>65</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </background_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_9</name>
+      <pv_name>SIM:SENS:POWER</pv_name>
+      <x>125</x>
+      <y>20</y>
+      <width>65</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </background_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_10</name>
+      <pv_name>SIM:SENS:PIEZO</pv_name>
+      <x>125</x>
+      <y>170</y>
+      <width>65</width>
+      <height>30</height>
+      <background_color>
+        <color red="255" green="160" blue="210">
+        </color>
+      </background_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_11</name>
+      <pv_name>SIM:SENS:MO_TEMP</pv_name>
+      <x>125</x>
+      <y>140</y>
+      <width>65</width>
+      <height>30</height>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_12</name>
+      <pv_name>SIM:SENS:VIBRATION</pv_name>
+      <x>125</x>
+      <y>110</y>
+      <width>65</width>
+      <height>30</height>
+      <background_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </background_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_55</name>
+      <text>Sensitivies</text>
+      <width>190</width>
+      <foreground_color>
+        <color name="Header_ForeGround" red="255" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Header_Background" red="77" green="77" blue="77">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
     </widget>
   </widget>
 </display>

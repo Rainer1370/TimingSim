@@ -1,23 +1,39 @@
 {
     "PHASE:ERROR": {"type": "float", "value": 0.0, "egu": "fs"},
-    "PHASE:SETPOINT": {"type": "float", "value": 0.0, "egu": "fs"},
+    "PHASE:SETPOINT": {"type": "float", "value": 10.0, "egu": "fs"},
+    "PHASE:READBACK": {"type": "float", "value": 0.0, "egu": "fs"},
     "PHASE:CORRECTED": {"type": "float", "value": 0.0, "egu": "fs"},
+    "PHASE:DRIFT": {"type": "float", "value": 0.0, "egu": "fs"},
+    "PHASE:DRIFT_RATE": {"type": "float", "value": 0.0, "egu": "fs/s"},
+
+    "MO:PHASE": {"type": "float", "value": 0.0, "egu": "fs"},
+    "MO:PHASE_CORRECTION": {"type": "float", "value": 0.0, "egu": "fs"},
+    "MO:FREQ": {"type": "float", "value": 162500000.00, "egu": "Hz"},
+    "MO:FREQ_DRIFT": {"type": "float", "value": 0.0, "egu": "Hz/s"},
+    "MO:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
 
     "PLL:CONTROL": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:CENTER": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:RANGE": {"type": "float", "value": 50.0, "egu": "fs"},
+    "PLL:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
 
     "PID:ENABLE": {"type": "enum", "enums": ["Off", "On"], "value": 1},
     "PID:Kp": {"type": "float", "value": 0.1, "egu": "1"},
     "PID:Ki": {"type": "float", "value": 0.01, "egu": "1/s"},
     "PID:Kd": {"type": "float", "value": 0.01, "egu": "s"},
-
     "PID:Kp_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
     "PID:Ki_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
     "PID:Kd_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
 
     "PIEZO:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
+
+    "SENS:POWER": {"type": "float", "value": 10.0, "egu": "fs/%"},
+    "SENS:TEMP": {"type": "float", "value": 5.0, "egu": "fs/°C"},
+    "SENS:FIBER": {"type": "float", "value": 2.0, "egu": "fs/°C"},
+    "SENS:VIBRATION": {"type": "float", "value": 20.0, "egu": "fs/unit"},
+    "SENS:MO_TEMP": {"type": "float", "value": 2.0, "egu": "fs/°C"},
+    "SENS:PIEZO": {"type": "float", "value": 0.05, "egu": "scale"},
 
     "TEMP:LAB": {"type": "float", "value": 22.0, "egu": "°C"},
     "TEMP:FIBER": {"type": "float", "value": 22.0, "egu": "°C"},
@@ -26,12 +42,15 @@
 
     "BEAM:DUMP": {"type": "enum", "enums": ["On", "Dumped"], "value": 0},
     "BEAM:RESET": {"type": "enum", "enums": ["No", "Reset"], "value": 0},
-
-    "START": {"type": "enum", "enums": ["Stop", "Start"], "value": 0},
-    "IOC:REBOOT": {"type": "enum", "enums": ["Idle", "Reboot"], "value": 0},
+    "BEAM:RESET_STATE": {"type": "enum", "enums": ["Inactive", "Active"], "value": 0},
+    "BEAM:RESET_ACK": {"type": "enum", "enums": ["Inactive", "Active"], "value": 0},
 
     "STATUS:1": {"type": "string", "value": ""},
     "STATUS:2": {"type": "string", "value": ""},
     "STATUS:3": {"type": "string", "value": ""},
-    "STATUS:4": {"type": "string", "value": ""}
+    "STATUS:4": {"type": "string", "value": ""},
+
+    "START": {"type": "enum", "enums": ["Stop", "Start"], "value": 0},
+    "RESET": {"type": "enum", "enums": ["No", "Reset"], "value": 0},
+    "ENV:SUMMARY": {"type": "string", "value": ""}
 }

@@ -8,6 +8,8 @@ from epics import PV
 beam_dump_pv = PV("SIM:BEAM:DUMP")
 message1 = PV("SIM:STATUS:1")
 message2 = PV("SIM:STATUS:2")
+#mo_phase_lock = PV("SIM:MO:LOCK_STATUS",1)
+#pll_phase_lock = PV("SIM:PLL:LOCK_STATUS",1)
 
 # Get the absolute path to the script directory
 script_dir = os.path.abspath(os.path.dirname(__file__))

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-13 06:43:22 by rain-->
+<!--Saved on 2025-02-13 13:56:03 by rrainer-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
@@ -61,7 +61,7 @@
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </color>
         </y_axis>
@@ -114,7 +114,7 @@
           <axis>2</axis>
           <trace_type>2</trace_type>
           <color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </color>
           <line_width>2</line_width>
@@ -289,7 +289,7 @@
             </font>
           </font>
           <foreground_color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </foreground_color>
           <background_color>
@@ -417,7 +417,7 @@
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </color>
         </y_axis>
@@ -457,7 +457,7 @@
           <axis>2</axis>
           <trace_type>2</trace_type>
           <color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </color>
           <line_width>2</line_width>
@@ -641,7 +641,7 @@
           </font>
         </font>
         <foreground_color>
-          <color name="Off" red="60" green="100" blue="60">
+          <color name="Off" red="0" green="100" blue="0">
           </color>
         </foreground_color>
         <background_color>
@@ -670,7 +670,7 @@
       <start>10 minute</start>
       <y_axes>
         <y_axis>
-          <title>PHASE:ERROR</title>
+          <title>LASER:PH_ERROR</title>
           <autoscale>false</autoscale>
           <log_scale>false</log_scale>
           <minimum>0.0</minimum>
@@ -704,12 +704,12 @@
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </color>
         </y_axis>
         <y_axis>
-          <title>PHASE:CORR</title>
+          <title>LASER:PH_CORR</title>
           <autoscale>false</autoscale>
           <log_scale>false</log_scale>
           <minimum>0.0</minimum>
@@ -725,7 +725,7 @@
       <traces>
         <trace>
           <name></name>
-          <y_pv>SIM:PHASE:ERROR</y_pv>
+          <y_pv>SIM:LASER:PH_ERROR</y_pv>
           <axis>0</axis>
           <trace_type>2</trace_type>
           <color>
@@ -757,7 +757,7 @@
           <axis>2</axis>
           <trace_type>2</trace_type>
           <color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </color>
           <line_width>2</line_width>
@@ -767,7 +767,7 @@
         </trace>
         <trace>
           <name></name>
-          <y_pv>SIM:PHASE:CORRECTED</y_pv>
+          <y_pv>SIM:LASER:PH_CORR</y_pv>
           <axis>3</axis>
           <trace_type>2</trace_type>
           <color>
@@ -791,7 +791,7 @@
       <widget type="group" version="3.0.0">
         <name>Group</name>
         <macros>
-          <NAME>PHASE:ERROR</NAME>
+          <NAME>LASER:PH_ERROR</NAME>
           <PV>SIM:$(NAME)</PV>
           <U>%</U>
         </macros>
@@ -932,7 +932,7 @@
             </font>
           </font>
           <foreground_color>
-            <color name="Off" red="60" green="100" blue="60">
+            <color name="Off" red="0" green="100" blue="0">
             </color>
           </foreground_color>
           <background_color>
@@ -956,7 +956,7 @@
       <widget type="group" version="3.0.0">
         <name>Group_16</name>
         <macros>
-          <NAME>PHASE:CORRECTED</NAME>
+          <NAME>LASER:PH_CORR</NAME>
           <PV>SIM:$(NAME)</PV>
           <U>V</U>
         </macros>
@@ -1068,7 +1068,7 @@
     <transparent>true</transparent>
     <widget type="tank" version="2.0.0">
       <name>Tank</name>
-      <pv_name>SIM:PHASE:ERROR</pv_name>
+      <pv_name>SIM:LASER:PH_ERROR</pv_name>
       <y>25</y>
       <width>188</width>
       <height>49</height>
@@ -1118,7 +1118,7 @@
       </foreground_color>
       <widget type="textupdate" version="2.0.0">
         <name>Text Update_12</name>
-        <pv_name>SIM:PHASE:ERROR</pv_name>
+        <pv_name>SIM:LASER:PH_ERROR</pv_name>
         <x>90</x>
         <width>66</width>
         <font>
@@ -1499,7 +1499,7 @@
         <rule name="Color Rule" prop_id="background_color" out_exp="false">
           <exp bool_exp="pv0==0">
             <value>
-              <color name="Off" red="60" green="100" blue="60">
+              <color name="Off" red="0" green="100" blue="0">
               </color>
             </value>
           </exp>
@@ -1580,7 +1580,7 @@
         <rule name="Color Rule" prop_id="background_color" out_exp="false">
           <exp bool_exp="pv0==0">
             <value>
-              <color name="Off" red="60" green="100" blue="60">
+              <color name="Off" red="0" green="100" blue="0">
               </color>
             </value>
           </exp>
@@ -1616,7 +1616,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update</name>
-      <pv_name>SIM:PHASE:DRIFT</pv_name>
+      <pv_name>SIM:LASER:PH_DRIFT</pv_name>
       <x>138</x>
       <y>56</y>
       <width>50</width>
@@ -1647,7 +1647,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_1</name>
-      <pv_name>SIM:PHASE:READBACK</pv_name>
+      <pv_name>SIM:LASER:PH_RB</pv_name>
       <x>138</x>
       <y>36</y>
       <width>50</width>
@@ -1709,7 +1709,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_11</name>
-      <pv_name>SIM:PHASE:DRIFT_RATE</pv_name>
+      <pv_name>SIM:LASER:PH_DRIFT_RATE</pv_name>
       <x>138</x>
       <y>76</y>
       <width>50</width>
@@ -1784,7 +1784,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_4</name>
-      <pv_name>SIM:PHASE:SETPOINT</pv_name>
+      <pv_name>SIM:LASER:PH_SP</pv_name>
       <x>138</x>
       <y>16</y>
       <width>50</width>
@@ -1849,7 +1849,7 @@
     </background_color>
     <widget type="spinner" version="2.0.0">
       <name>Spinner_8</name>
-      <pv_name>SIM:PHASE:SETPOINT</pv_name>
+      <pv_name>SIM:LASER:PH_SP</pv_name>
       <y>25</y>
       <width>188</width>
       <precision>3</precision>
@@ -2263,5 +2263,20 @@
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
     </widget>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_24</name>
+    <actions execute_as_one="true">
+      <action type="write_pv">
+        <description>Simulation Reset</description>
+        <pv_name>SIM:RESET</pv_name>
+        <value>1</value>
+      </action>
+    </actions>
+    <pv_name>SIM:RESET</pv_name>
+    <text>PLL RESET</text>
+    <x>11</x>
+    <y>450</y>
+    <width>190</width>
   </widget>
 </display>

@@ -28,6 +28,7 @@ BASE_TEMP = 22.0  # Average lab temperature in °C
 TEMP_AMPLITUDE = 2.5  # Amplitude of temperature swings
 CYCLE_PERIOD = 86400  # Diurnal cycle period in seconds (24 hours)
 
+#========================================================
 class PhaseDriftIOC(Driver):
     def __init__(self):
         super().__init__()
@@ -38,6 +39,10 @@ class PhaseDriftIOC(Driver):
         # Start environmental factor updates
         self.env_thread = threading.Thread(target=self.update_environmental_factors, daemon=True)
         self.env_thread.start()
+
+        # Start MO updates
+        self.mo_thread = threading.Thread(target=self.update_mo_with_feedback, daemon=True)
+        self.mo_thread.start()
 
         # Start the heartbeat PV
         self.heartbeat_thread = threading.Thread(target=self.heartbeat_pv, daemon=True)
@@ -75,6 +80,7 @@ class PhaseDriftIOC(Driver):
                 f.write(f"{pv_name}\n")
         print(f"✅ PV list saved to dbl.txt (Timestamp: {timestamp})")
 
+#========================================================
     def update_environmental_factors(self):
         """Simulates diurnal temperature changes and external disturbances."""
         while True:
@@ -157,8 +163,119 @@ class PhaseDriftIOC(Driver):
         # (I also created some tools in the GUI to throw in random earthquakes, brown-outs, etc.)
         #========================================================
 
+#========================================================
+    def update_mo_with_feedback(self):
+        """Simulates Master Oscillator (MO) phase and frequency drift with feedback correction."""
+        while True:
+            # Read current parameters
+            mo_freq = self.getParam("MO:FREQ")  # Current MO frequency
+            mo_phase = self.getParam("MO:PHASE")  # Current MO phase
+            lock_status = self.getParam("MO:LOCK_STATUS")  # Lock state
+
+            # Simulated external disturbances (environmental factors)
+            temp_drift = self.getParam("SENS:MO_TEMP") * 0.0001  # Small thermal drift
+            fiber_drift = self.getParam("SENS:FIBER") * 0.0002  # Fiber length drift
+            vibration_drift = self.getParam("SENS:VIBRATION") * 0.00005  # Vibrational noise
+            power_drift = (1.0 - self.getParam("POWER:STABILITY")) * 0.0003  # Power stability effect
+
+            # Calculate time since last update (for more accurate phase drift)
+            current_time = time.time()
+            dt = current_time - last_update_time  # Time step (seconds)
+            last_update_time = current_time  # Update last time
+
+            # Aggregate external influences
+            external_drift = temp_drift + fiber_drift + vibration_drift + power_drift
+
+            # Introduce natural frequency fluctuation (±10 Hz variation)
+            natural_drift = np.random.uniform(-10, 10)  # Increased fluctuation
+            mo_freq += natural_drift  # Apply small random deviation
+
+            # Apply feedback correction to restore MO frequency toward nominal
+            nominal_freq = 162500000.00  # Nominal frequency
+            correction_strength = 0.05 if lock_status == 1 else 0.005  # Faster correction when locked
+            mo_freq += (nominal_freq - mo_freq) * correction_strength
+
+            # Ensure frequency stays within a reasonable range (±0.1% deviation)
+            mo_freq = max(nominal_freq * 0.999, min(nominal_freq * 1.001, mo_freq))
+
+            # Compute phase drift based on frequency deviation (using `dt`)
+            freq_deviation = mo_freq - nominal_freq  # How much the frequency is off
+            mo_phase += freq_deviation * dt  # Phase accumulation over time
+
+            # Ensure phase stays within realistic bounds (modulo 360 for phase wrapping)
+            mo_phase = mo_phase % 360  # Keep phase in [0, 360] fs
+
+            # If MO is locked, apply a **gentle** correction instead of hard locking
+            if lock_status == 1:
+                mo_freq = nominal_freq + np.random.uniform(-0.1, 0.1)  # Tiny natural movement (~±0.1 Hz)
+                mo_phase = mo_phase  # Keep current phase but allow drift correction
+
+            # Update EPICS PVs
+            self.setParam("MO:PHASE", mo_phase)
+            self.setParam("MO:FREQ", mo_freq)
+            self.setParam("MO:PHASE_CORRECTION", (nominal_freq - mo_freq) * correction_strength)
+            self.updatePVs()
+
+            time.sleep(1)  # Update every second
+
+#========================================================
+# 🔹 **Explanation of Master Oscillator (MO) Phase Drift and Correction**
+# 🔹 **And Why This (MIGHT also) Work**
+# --------------------------------------------------------
+#
+# ✅ **Phase Drift Model**:
+# - The Master Oscillator (MO) phase naturally drifts based on its frequency.
+# - External factors, such as **temperature variations, fiber stretching, and vibrations**, 
+#   contribute to phase instability over time.
+# - `MO:PHASE` is updated **each cycle** based on the MO frequency, with added random disturbances.
+#
+# ✅ **Frequency Drift Model**:
+# - The MO frequency slightly deviates due to **small stochastic variations**.
+# - These fluctuations model real-world **oscillator instability** seen in practical RF systems.
+# - `natural_drift` introduces a **small random shift** in frequency per update cycle.
+#
+# ✅ **Feedback Correction Mechanism**:
+# - The system applies a **restoring force** to gradually bring `MO:FREQ` back to `162.5 MHz`.
+# - The strength of correction is controlled by `correction_strength`, which is:
+#   - **Stronger (0.05) when locked (`MO:LOCK_STATUS=1`)** to maintain precise frequency.
+#   - **Weaker (0.005) when unlocked (`MO:LOCK_STATUS=0`)**, allowing freer fluctuations.
+# - The correction **gradually** adjusts `MO:FREQ` toward the nominal value instead of forcing a hard reset.
+#
+# ✅ **Locking Mechanism (`MO:LOCK_STATUS`)**:
+# - When **unlocked (`MO:LOCK_STATUS=0`)**, phase and frequency experience **normal drift**.
+# - When **locked (`MO:LOCK_STATUS=1`)**, frequency is held close to **162.5 MHz**.
+# - Phase is **not reset**, but drift is minimized, ensuring continuity.
+#
+# ✅ **Bounded Values for Stability**:
+# - The phase (`MO:PHASE`) is kept within **0 to 360 fs** using `modulo 360` arithmetic.
+# - The frequency (`MO:FREQ`) is limited to **±0.1% deviation** from 162.5 MHz.
+# - These constraints ensure **realistic behavior**, preventing extreme drift that would be 
+#   unrealistic for a feedback-controlled oscillator.
+#
+# ✅ **Simulation Step Timing**:
+# - The function updates **every 1 second (`time.sleep(1)`)**.
+# - This time interval is **adjustable** but should match real-world control loop update rates.
+#
+# ✅ **Practical Applications**:
+# - This simulation mimics **real-world RF oscillator behavior** seen in:
+#   - **Optical Timing Systems**
+#   - **Phase-locked Loops (PLLs)**
+#   - **Accelerator RF Reference Clocks**
+#   - **Frequency Control in Particle Accelerators**
+# - The **lock condition (`MO:LOCK_STATUS`)** mimics the **PLL locking process** in real control systems.
+#
+# 🔹 **Final Notes**:
+# - This approach **does not use a strict PID loop**, but instead models a **natural drift process** 
+#   with realistic environmental effects and a **self-stabilizing correction mechanism**.
+# - Further improvements could include **adaptive feedback** based on temperature coefficients 
+#   or additional **delay factors** simulating response latency.
+#
+#========================================================
+
+#========================================================
     def heartbeat_pv(self):
         """Updates the heartbeat PV every second, toggling between 0 and 1."""
+        """Lets you know that the "soft IOC" is running..."""
         while True:
             current_heartbeat = self.getParam("IOC:HEARTBEAT")
             self.setParam("IOC:HEARTBEAT", 1 - current_heartbeat)  # Toggle between 0 and 1
@@ -181,8 +298,6 @@ class PhaseDriftIOC(Driver):
         subprocess.Popen(["python", script_path])
         self.simulation_running = True
         self.setParam("START", 1)
-#        self.setParam("STATUS:1", "Simulation Started at:")
-#        self.setParam("STATUS:2", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         self.updatePVs()
 
     def stop_simulation(self):
@@ -203,6 +318,7 @@ class PhaseDriftIOC(Driver):
         self.setParam("STATUS:4", "")
         self.updatePVs()
 
+#========================================================
     def write(self, reason, value):
         """Handles PV writes to control the simulation."""
         # print(f"📝 Attempting to write: {reason} = {value}", flush=True)
@@ -218,7 +334,7 @@ class PhaseDriftIOC(Driver):
                 self.setParam("START", 0)
                 self.setParamStatus("START", 0, 0)  # No alarm
                 self.stop_simulation()
-            self.updatePVs()
+                self.updatePVs()
             return True  # Ensure pcaspy processes the write
 
         elif reason == "BEAM:DUMP":
@@ -251,6 +367,7 @@ class PhaseDriftIOC(Driver):
 
         return super().write(reason, value)
 
+#========================================================
 def main():
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
     server = SimpleServer()

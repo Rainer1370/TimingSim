@@ -1,10 +1,10 @@
 {
-    "PHASE:ERROR": {"type": "float", "value": 0.0, "egu": "fs"},
-    "PHASE:SETPOINT": {"type": "float", "value": 10.0, "egu": "fs"},
-    "PHASE:READBACK": {"type": "float", "value": 0.0, "egu": "fs"},
-    "PHASE:CORRECTED": {"type": "float", "value": 0.0, "egu": "fs"},
-    "PHASE:DRIFT": {"type": "float", "value": 0.0, "egu": "fs"},
-    "PHASE:DRIFT_RATE": {"type": "float", "value": 0.0, "egu": "fs/s"},
+    "LASER:PH_ERROR": {"type": "float", "value": 0.0, "egu": "fs"},
+    "LASER:PH_SP": {"type": "float", "value": 10.0, "egu": "fs"},
+    "LASER:PH_RB": {"type": "float", "value": 0.0, "egu": "fs"},
+    "LASER:PH_CORR": {"type": "float", "value": 0.0, "egu": "fs"},
+    "LASER:PH_DRIFT": {"type": "float", "value": 0.0, "egu": "fs"},
+    "LASER:PH_DRIFT_RATE": {"type": "float", "value": 0.0, "egu": "fs/s"},
 
     "MO:PHASE": {"type": "float", "value": 0.0, "egu": "fs"},
     "MO:PHASE_CORRECTION": {"type": "float", "value": 0.0, "egu": "fs"},

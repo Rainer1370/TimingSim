@@ -3,11 +3,11 @@ import time
 from simple_pid import PID
 import numpy as np
 
-# Read/Write PVs
-phase_error_pv = PV("SIM:PHASE:ERROR")
-phase_setpoint_pv = PV("SIM:PHASE:SETPOINT")
-phase_readback_pv = PV("SIM:PHASE:READBACK")
-phase_corrected_pv = PV("SIM:PHASE:CORRECTED")
+# Read/Write PVs for Laser Phase Control
+laser_phase_error_pv = PV("SIM:LASER:PH_ERROR")
+laser_phase_setpoint_pv = PV("SIM:LASER:PH_SP")
+laser_phase_readback_pv = PV("SIM:LASER:PH_RB")
+laser_phase_corrected_pv = PV("SIM:LASER:PH_CORR")
 piezo_output_pv = PV("SIM:PIEZO:OUTPUT")
 pll_center_pv = PV("SIM:PLL:CENTER")
 pll_output_pv = PV("SIM:PLL:OUTPUT")
@@ -41,9 +41,9 @@ pid = PID(0.1, 0.01, 0.01, setpoint=0.0)
 pid.sample_time = 1.0  # Run every second
 
 #=======================================================
-def update_pid_gains(phase_error, piezo_output):
+def update_pid_gains(laser_phase_error, piezo_output):
     """
-    Dynamically adjusts PID gains based on phase error and piezo response, unless overridden.
+    Dynamically adjusts PID gains based on laser phase error and piezo response, unless overridden.
     The function ensures that Kp, Ki, and Kd adaptively adjust unless a manual override is enabled.
     """
     kp_mode = kp_mode_pv.get() or 0
@@ -60,40 +60,39 @@ def update_pid_gains(phase_error, piezo_output):
         message4_pv.put("PID Control Active", wait=True)
 
     if kp_mode == 0:
-        if abs(phase_error) > 1.0:
-            kp += 0.01  
+        if abs(laser_phase_error) > 1.0:
+            kp += 0.01
         else:
-            kp -= 0.005  
-        kp = max(0.05, min(kp, 5.0))  
-        kp_pv.put(kp, wait=True)  
+            kp -= 0.005
+        kp = max(0.05, min(kp, 5.0))
+        kp_pv.put(kp, wait=True)
 
     if ki_mode == 0:
         if abs(piezo_output) > 0.5:
-            ki += 0.001  
+            ki += 0.001
         else:
-            ki -= 0.0005  
+            ki -= 0.0005
         ki = max(0.001, min(ki, 1.0))
-        ki_pv.put(ki, wait=True)  
+        ki_pv.put(ki, wait=True)
 
     if kd_mode == 0:
-        if abs(phase_error) > 2.0:
-            kd += 0.002  
+        if abs(laser_phase_error) > 2.0:
+            kd += 0.002
         else:
-            kd -= 0.001  
+            kd -= 0.001
         kd = max(0.001, min(kd, 1.0))
-        kd_pv.put(kd, wait=True)  
+        kd_pv.put(kd, wait=True)
 
     pid.tunings = (kp, ki, kd)
 
 #=======================================================
 def monitor_phase_lock():
     """
-    Monitors phase error and applies corrections dynamically using PID control.
+    Monitors laser phase error and applies corrections dynamically using PID control.
 
-    This function:
-    - Retrieves the current phase error.
-    - Computes a PID correction to the Piezo system.
-    - Adjusts the phase error to stabilize the system.
+    - Retrieves the current laser phase error.
+    - Computes a PID correction using the Piezo system.
+    - Adjusts the laser phase error to stabilize the system.
     - Updates PLL and MO lock status.
     - Dumps the beam if the error exceeds the PLL range.
     """
@@ -108,13 +107,13 @@ def monitor_phase_lock():
             time.sleep(1)
             continue
 
-        # Get current phase error and setpoint
-        phase_error = phase_error_pv.get() or 0.0
-        phase_setpoint = phase_setpoint_pv.get() or 0.0
+        # Get current laser phase error and setpoint
+        laser_phase_error = laser_phase_error_pv.get() or 0.0
+        laser_phase_setpoint = laser_phase_setpoint_pv.get() or 0.0
         pll_range = pll_range_pv.get() or 50.0
 
         # Compute PID correction
-        correction = pid(phase_error)
+        correction = pid(laser_phase_error)
 
         # Simulate piezo response (lag effect)
         piezo_response = piezo_output_pv.get() or 0.0
@@ -122,17 +121,17 @@ def monitor_phase_lock():
         piezo_output_pv.put(piezo_response, wait=True)
 
         # Adjust phase error based on Piezo feedback
-        new_phase_error = phase_error - (piezo_response * 0.1)
-        phase_error_pv.put(new_phase_error)
-        phase_readback_pv.put(new_phase_error)
+        new_laser_phase_error = laser_phase_error - (piezo_response * 0.1)
+        laser_phase_error_pv.put(new_laser_phase_error)
+        laser_phase_readback_pv.put(new_laser_phase_error)
 
         # Adjust PLL and corrected phase outputs
-        pll_output_pv.put(new_phase_error / 2)
-        phase_corrected_pv.put(new_phase_error / 3)
+        pll_output_pv.put(new_laser_phase_error / 2)
+        laser_phase_corrected_pv.put(new_laser_phase_error / 3)
 
         # Ensure MO and PLL Lock Status are correctly updated
         lock_threshold = 50.0  # Lock threshold in fs
-        if abs(new_phase_error) < lock_threshold:
+        if abs(new_laser_phase_error) < lock_threshold:
             pll_lock_status_pv.put(1)  # Locked
             mo_lock_status_pv.put(1)   # Locked
         else:
@@ -140,21 +139,21 @@ def monitor_phase_lock():
             mo_lock_status_pv.put(0)   # Unlocked
 
         # Adaptive tuning for PID
-        update_pid_gains(new_phase_error, piezo_response)
+        update_pid_gains(new_laser_phase_error, piezo_response)
 
         # Beam Dump Condition
-        if abs(new_phase_error) > pll_range:
-            print("🚨 Beam Dumped: Phase Out of Lock!")
+        if abs(new_laser_phase_error) > pll_range:
+            print(f"🚨 Beam Dumped: Laser Phase Error ({new_laser_phase_error} fs) Exceeded {pll_range} fs!")
             beam_dump_pv.put(1)
 
         time.sleep(1)
 
 #=======================================================
 if __name__ == "__main__":
-    print("✅ PID Control Waiting for Start Signal...")
+    print("✅ Laser PID Control Waiting for Start Signal...")
 
     while True:
         if sim_start_pv.get() == 1:
-            print("🚀 PID Control Started.")
+            print("🚀 Laser PID Control Started.")
             monitor_phase_lock()
         time.sleep(1)  # Prevent CPU overuse

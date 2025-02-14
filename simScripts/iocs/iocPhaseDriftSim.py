@@ -1,13 +1,11 @@
 from pcaspy import Driver, SimpleServer
-import numpy as np
 import time
 import signal
 import sys
-import subprocess
 import os
 import json
-import threading
 import datetime
+import threading  # ✅ Added threading import
 
 # Define EPICS PVs
 prefix = "SIM:"
@@ -17,32 +15,19 @@ pvdb_path = os.path.join(os.path.dirname(__file__), "pvdb.json")
 with open(pvdb_path, "r") as f:
     pvdb = json.load(f)
 
-# Define IOC-specific PVs outside of the "SIM:" namespace
+# Define IOC-specific PVs
 ioc_pvdb = {
     "IOC:HEARTBEAT": {"type": "int", "value": 0},
     "IOC:START_TIME": {"type": "string", "value": ""}
 }
 
-# Constants for Environmental Simulations
-BASE_TEMP = 22.0  # Average lab temperature in °C
-TEMP_AMPLITUDE = 2.5  # Amplitude of temperature swings
-CYCLE_PERIOD = 86400  # Diurnal cycle period in seconds (24 hours)
-
 #========================================================
 class PhaseDriftIOC(Driver):
+    """Handles IOC initialization, heartbeat, and timestamping."""
     def __init__(self):
         super().__init__()
-        self.simulation_running = False
         self.initialize_pvs()
         self.write_pv_list()
-
-        # Start environmental factor updates
-        self.env_thread = threading.Thread(target=self.update_environmental_factors, daemon=True)
-        self.env_thread.start()
-
-        # Start MO updates
-        self.mo_thread = threading.Thread(target=self.update_mo_with_feedback, daemon=True)
-        self.mo_thread.start()
 
         # Start the heartbeat PV
         self.heartbeat_thread = threading.Thread(target=self.heartbeat_pv, daemon=True)
@@ -53,322 +38,32 @@ class PhaseDriftIOC(Driver):
         self.updatePVs()
 
     def initialize_pvs(self):
-        """Ensures all PVs are initialized with their default values to prevent disconnections."""
-        for pv_name, properties in pvdb.items():
-            if "type" in properties and properties["type"] == "enum":
-                properties["value"] = int(properties["value"])
-            elif pv_name.startswith("PID:"):
-                properties["value"] = 0.0  # Ensure PID gains start at 0
-
-            self.setParam(pv_name, properties["value"])
-
-        # Initialize IOC-specific PVs
-        for pv_name, properties in ioc_pvdb.items():
-            self.setParam(pv_name, properties["value"])
-            self.setParamStatus(pv_name, 0, 0)  # Ensure no alarms on startup
+        """Ensures all PVs are initialized with default values."""
+        for pv_name, properties in {**pvdb, **ioc_pvdb}.items():
+            self.setParam(pv_name, properties.get("value", 0.0))
         self.updatePVs()
 
     def write_pv_list(self):
-        """Writes the current PV list to `dbl.txt` with a timestamp."""
+        """Writes the PV list to `dbl.txt` with a timestamp."""
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         dbl_path = os.path.join(os.path.dirname(__file__), "dbl.txt")
         with open(dbl_path, "w") as f:
             f.write(f"# PV List Generated on {timestamp}\n\n")
-            for pv_name in pvdb.keys():
-                f.write(f"{prefix}{pv_name}\n")
-            for pv_name in ioc_pvdb.keys():
-                f.write(f"{pv_name}\n")
+            for pv in {**pvdb, **ioc_pvdb}:
+                f.write(f"{prefix}{pv}\n")
         print(f"✅ PV list saved to dbl.txt (Timestamp: {timestamp})")
 
-#========================================================
-    def update_environmental_factors(self):
-        """Simulates diurnal temperature changes and external disturbances."""
-        while True:
-            now = datetime.datetime.now()
-        #========================================================
-        # Temperature follows a diurnal cycle, so we use a sin wave here and reference TOD
-            seconds_since_midnight = now.hour * 3600 + now.minute * 60 + now.second
-            diurnal_temp_offset = TEMP_AMPLITUDE * np.sin((2 * np.pi * seconds_since_midnight) / CYCLE_PERIOD)
-
-        # 🌡️ **Simulate realistic temperature cycles**
-            temp_lab = BASE_TEMP + diurnal_temp_offset
-            # Fiber temp variation based off Lab Temp as a base
-            temp_fiber = temp_lab + np.random.uniform(-0.5, 0.5)
-
-        #========================================================
-        # 🔨 **Realistic Construction & Vibration Effects**
-            vibration_ext = self.getParam("VIBRATION:EXT") or 0.0
-            # Small background noise,
-            # We'll just throw in a 5% chance of momentary vibration
-            vibration_noise = np.random.normal(0, 0.02)
-
-            # 📌 **Random Construction Spikes (5% chance)**
-            if np.random.random() < 0.05:
-                vibration_noise += np.random.uniform(0.2, 0.5)
-            #    print("🚨 Construction Vibration Spike Detected!") 
-            # Depends on how verbose you want the code
-
-        # 🔄 **Decay Effect: Gradually return vibration to baseline**
-            # - Vibration decays by ** Maybe 3%? **, ensuring it doesn't accumulate indefinitely.
-            # - Can be adjusted to model longer (or shorter) damping effects.
-            vibration_ext = max(0, (vibration_ext + vibration_noise) * 0.97)  # Modify decay rate if needed
-
-        #========================================================
-        # ⚡ **Power Stability Fluctuations**
-            power_stability = self.getParam("POWER:STABILITY") or 1.0
-            # 📌 **Random fluctuations in power**
-            power_stability += np.random.uniform(-0.01, 0.01)
-            # I remember how unstable PG&E can be, but we can modify this if needed
-            # 🔄 **Decay Effect: Gradually return to 1.0**
-            power_stability += (1.0 - power_stability) * 0.1  # Smoothly correct deviations
-            # ✅ Keep within safe range
-            power_stability = max(0.95, min(1.05, power_stability))
-            # ⚡ **Power Stability Fluctuations**
-            # - Power fluctuates slightly within a safe range
-            #   (0.95 - 1.05)
-            # - If power deviates from **1.0**, it gradually returns
-            #   by correcting **10% per update**.
-
-        #========================================================
-        # 📝 **Apply Updates to PVs**
-            self.setParam("TEMP:LAB", temp_lab)
-            self.setParam("TEMP:FIBER", temp_fiber)
-            self.setParam("VIBRATION:EXT", vibration_ext)
-            self.setParam("POWER:STABILITY", power_stability)
-
-            self.updatePVs()
-            time.sleep(5)  # Update every 5 seconds
-
-        #========================================================
-        # 🔹 **Why This (MIGHT) Work**
-        # ----------------------------------------
-        # ✅ **Realistic Temperature Behavior**:
-        # - Lab temperature follows a natural diurnal cycle (24-hour sine wave).
-        # - Fiber temperature varies slightly with random fluctuations (±0.5°C).
-        #
-        # ✅ **Improved Vibration Model**:
-        # - Normally fluctuates with small background noise.
-        # - **5% chance of construction spikes**, which momentarily increases vibration.
-        # - **Decay Effect**: Vibrations gradually return to baseline (0.95x per update).
-        #
-        # ✅ **Improved Power Stability Model**:
-        # - Power fluctuates slightly within a safe range (0.95 - 1.05).
-        # - **Decay Effect**: If power deviates too far, it gradually returns to `1.0`
-        #   by applying a 10% correction per update.
-        #
-        # ✅ **Why This is Important**:
-        # - Prevents runaway effects where vibration and power instability accumulate.
-        # - Simulates real-world lab conditions where external disturbances settle over time.
-        # - Creates a **more accurate model** for evaluating system stability & control response.
-        # (I also created some tools in the GUI to throw in random earthquakes, brown-outs, etc.)
-        #========================================================
-
-#========================================================
-    def update_mo_with_feedback(self):
-        """Simulates Master Oscillator (MO) phase and frequency drift with feedback correction."""
-        while True:
-            # Read current parameters
-            mo_freq = self.getParam("MO:FREQ")  # Current MO frequency
-            mo_phase = self.getParam("MO:PHASE")  # Current MO phase
-            lock_status = self.getParam("MO:LOCK_STATUS")  # Lock state
-
-            # Simulated external disturbances (environmental factors)
-            temp_drift = self.getParam("SENS:MO_TEMP") * 0.0001  # Small thermal drift
-            fiber_drift = self.getParam("SENS:FIBER") * 0.0002  # Fiber length drift
-            vibration_drift = self.getParam("SENS:VIBRATION") * 0.00005  # Vibrational noise
-            power_drift = (1.0 - self.getParam("POWER:STABILITY")) * 0.0003  # Power stability effect
-
-            # Calculate time since last update (for more accurate phase drift)
-            current_time = time.time()
-            dt = current_time - last_update_time  # Time step (seconds)
-            last_update_time = current_time  # Update last time
-
-            # Aggregate external influences
-            external_drift = temp_drift + fiber_drift + vibration_drift + power_drift
-
-            # Introduce natural frequency fluctuation (±10 Hz variation)
-            natural_drift = np.random.uniform(-10, 10)  # Increased fluctuation
-            mo_freq += natural_drift  # Apply small random deviation
-
-            # Apply feedback correction to restore MO frequency toward nominal
-            nominal_freq = 162500000.00  # Nominal frequency
-            correction_strength = 0.05 if lock_status == 1 else 0.005  # Faster correction when locked
-            mo_freq += (nominal_freq - mo_freq) * correction_strength
-
-            # Ensure frequency stays within a reasonable range (±0.1% deviation)
-            mo_freq = max(nominal_freq * 0.999, min(nominal_freq * 1.001, mo_freq))
-
-            # Compute phase drift based on frequency deviation (using `dt`)
-            freq_deviation = mo_freq - nominal_freq  # How much the frequency is off
-            mo_phase += freq_deviation * dt  # Phase accumulation over time
-
-            # Ensure phase stays within realistic bounds (modulo 360 for phase wrapping)
-            mo_phase = mo_phase % 360  # Keep phase in [0, 360] fs
-
-            # If MO is locked, apply a **gentle** correction instead of hard locking
-            if lock_status == 1:
-                mo_freq = nominal_freq + np.random.uniform(-0.1, 0.1)  # Tiny natural movement (~±0.1 Hz)
-                mo_phase = mo_phase  # Keep current phase but allow drift correction
-
-            # Update EPICS PVs
-            self.setParam("MO:PHASE", mo_phase)
-            self.setParam("MO:FREQ", mo_freq)
-            self.setParam("MO:PHASE_CORRECTION", (nominal_freq - mo_freq) * correction_strength)
-            self.updatePVs()
-
-            time.sleep(1)  # Update every second
-
-#========================================================
-# 🔹 **Explanation of Master Oscillator (MO) Phase Drift and Correction**
-# 🔹 **And Why This (MIGHT also) Work**
-# --------------------------------------------------------
-#
-# ✅ **Phase Drift Model**:
-# - The Master Oscillator (MO) phase naturally drifts based on its frequency.
-# - External factors, such as **temperature variations, fiber stretching, and vibrations**, 
-#   contribute to phase instability over time.
-# - `MO:PHASE` is updated **each cycle** based on the MO frequency, with added random disturbances.
-#
-# ✅ **Frequency Drift Model**:
-# - The MO frequency slightly deviates due to **small stochastic variations**.
-# - These fluctuations model real-world **oscillator instability** seen in practical RF systems.
-# - `natural_drift` introduces a **small random shift** in frequency per update cycle.
-#
-# ✅ **Feedback Correction Mechanism**:
-# - The system applies a **restoring force** to gradually bring `MO:FREQ` back to `162.5 MHz`.
-# - The strength of correction is controlled by `correction_strength`, which is:
-#   - **Stronger (0.05) when locked (`MO:LOCK_STATUS=1`)** to maintain precise frequency.
-#   - **Weaker (0.005) when unlocked (`MO:LOCK_STATUS=0`)**, allowing freer fluctuations.
-# - The correction **gradually** adjusts `MO:FREQ` toward the nominal value instead of forcing a hard reset.
-#
-# ✅ **Locking Mechanism (`MO:LOCK_STATUS`)**:
-# - When **unlocked (`MO:LOCK_STATUS=0`)**, phase and frequency experience **normal drift**.
-# - When **locked (`MO:LOCK_STATUS=1`)**, frequency is held close to **162.5 MHz**.
-# - Phase is **not reset**, but drift is minimized, ensuring continuity.
-#
-# ✅ **Bounded Values for Stability**:
-# - The phase (`MO:PHASE`) is kept within **0 to 360 fs** using `modulo 360` arithmetic.
-# - The frequency (`MO:FREQ`) is limited to **±0.1% deviation** from 162.5 MHz.
-# - These constraints ensure **realistic behavior**, preventing extreme drift that would be 
-#   unrealistic for a feedback-controlled oscillator.
-#
-# ✅ **Simulation Step Timing**:
-# - The function updates **every 1 second (`time.sleep(1)`)**.
-# - This time interval is **adjustable** but should match real-world control loop update rates.
-#
-# ✅ **Practical Applications**:
-# - This simulation mimics **real-world RF oscillator behavior** seen in:
-#   - **Optical Timing Systems**
-#   - **Phase-locked Loops (PLLs)**
-#   - **Accelerator RF Reference Clocks**
-#   - **Frequency Control in Particle Accelerators**
-# - The **lock condition (`MO:LOCK_STATUS`)** mimics the **PLL locking process** in real control systems.
-#
-# 🔹 **Final Notes**:
-# - This approach **does not use a strict PID loop**, but instead models a **natural drift process** 
-#   with realistic environmental effects and a **self-stabilizing correction mechanism**.
-# - Further improvements could include **adaptive feedback** based on temperature coefficients 
-#   or additional **delay factors** simulating response latency.
-#
-#========================================================
-
-#========================================================
     def heartbeat_pv(self):
-        """Updates the heartbeat PV every second, toggling between 0 and 1."""
-        """Lets you know that the "soft IOC" is running..."""
+        """Toggles the heartbeat PV every second to indicate the IOC is running."""
         while True:
             current_heartbeat = self.getParam("IOC:HEARTBEAT")
             self.setParam("IOC:HEARTBEAT", 1 - current_heartbeat)  # Toggle between 0 and 1
             self.updatePVs()
-            time.sleep(1)  # 1Hz update rate
-
-    def start_simulation(self):
-        """Starts the simulation by launching simulation_manager.py."""
-        if self.simulation_running:
-            print("🚀 Simulation already running.", flush=True)
-            return
-
-        print("🚀 Starting simulation...", flush=True)
-        script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "simulation_manager.py")
-
-        if not os.path.exists(script_path):
-            print(f"❌ Error: simulation_manager.py not found at {script_path}", flush=True)
-            return
-
-        subprocess.Popen(["python", script_path])
-        self.simulation_running = True
-        self.setParam("START", 1)
-        self.updatePVs()
-
-    def stop_simulation(self):
-        """Stops the simulation by killing related processes."""
-        if not self.simulation_running:
-            print("🛑 Simulation already stopped.", flush=True)
-            return
-
-        print("🛑 Stopping simulation...", flush=True)
-        subprocess.call(["pkill", "-f", "simulation_manager.py"])
-        subprocess.call(["pkill", "-f", "phase_sim.py"])
-        subprocess.call(["pkill", "-f", "pid_control.py"])
-        self.simulation_running = False
-        self.setParam("START", 0)
-        self.setParam("STATUS:1", "Simulation Stopped at:")
-        self.setParam("STATUS:2", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        self.setParam("STATUS:3", "")
-        self.setParam("STATUS:4", "")
-        self.updatePVs()
-
-#========================================================
-    def write(self, reason, value):
-        """Handles PV writes to control the simulation."""
-        # print(f"📝 Attempting to write: {reason} = {value}", flush=True)
-
-        if reason == "START":
-            if value == 1:
-                # print("🚀 Received Start Command", flush=True)
-                self.setParam("START", 1)
-                self.setParamStatus("START", 0, 0)  # No alarm
-                self.start_simulation()
-            else:
-                # print("🛑 Received Stop Command", flush=True)
-                self.setParam("START", 0)
-                self.setParamStatus("START", 0, 0)  # No alarm
-                self.stop_simulation()
-                self.updatePVs()
-            return True  # Ensure pcaspy processes the write
-
-        elif reason == "BEAM:DUMP":
-            print(f"🔹 Current value before change: {self.getParam('BEAM:DUMP')}", flush=True)
-
-            if value in [0, 1]:  # Ensure valid index
-                self.setParam("BEAM:DUMP", value)
-                self.setParam("STATUS:3", "Beam Dumped at")
-                self.setParam("STATUS:4", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-                self.updatePVs()
-                # print(f"✅ Updated BEAM:DUMP to {value} ({['On', 'Dumped'][value]})", flush=True)
-            else:
-                print(f"⚠️ Invalid value for BEAM:DUMP: {value}", flush=True)
-
-            return True  # Ensure pcaspy processes the write
-
-        elif reason == "BEAM:RESET":
-            if value == 1:  # Reset only when BEAM:RESET is set to 1
-                # print("🔄 Resetting BEAM:DUMP to On (0)", flush=True)
-                self.setParam("BEAM:DUMP", 0)  # Force reset to "On"
-                self.updatePVs()
-                time.sleep(0.1)  # Small delay to ensure change propagates
-                self.setParam("BEAM:RESET", 0)  # Automatically reset BEAM:RESET
-                self.updatePVs()
-                self.setParam("STATUS:3", "BEAM RESET")  # Update status
-                self.setParam("STATUS:4", "")
-                # print("✅ BEAM:DUMP reset successfully.", flush=True)
-
-            return True  # Ensure pcaspy processes the write
-
-        return super().write(reason, value)
+            time.sleep(1)
 
 #========================================================
 def main():
+    """Main function to start the IOC server."""
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
     server = SimpleServer()
     server.createPV(prefix, pvdb)

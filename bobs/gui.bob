@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-13 13:56:03 by rrainer-->
+<!--Saved on 2025-02-14 14:46:48 by rain-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
@@ -53,6 +53,19 @@
           </color>
         </y_axis>
         <y_axis>
+          <title>MO:PHASE</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>0.0</minimum>
+          <maximum>5.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color red="200" green="200" blue="50">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
           <title>POWER:STABILITY</title>
           <autoscale>false</autoscale>
           <log_scale>false</log_scale>
@@ -61,7 +74,7 @@
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
             </color>
           </color>
         </y_axis>
@@ -69,8 +82,8 @@
           <title>VIBRATION:EXT</title>
           <autoscale>false</autoscale>
           <log_scale>false</log_scale>
-          <minimum>0.0</minimum>
-          <maximum>5.0</maximum>
+          <minimum>-50.0</minimum>
+          <maximum>50.0</maximum>
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
@@ -110,11 +123,25 @@
         </trace>
         <trace>
           <name></name>
-          <y_pv>SIM:POWER:STABILITY</y_pv>
+          <y_pv>SIM:MO:PHASE</y_pv>
           <axis>2</axis>
           <trace_type>2</trace_type>
           <color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color red="200" green="200" blue="50">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:POWER:STABILITY</y_pv>
+          <axis>3</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color name="Off" red="60" green="100" blue="60">
             </color>
           </color>
           <line_width>2</line_width>
@@ -125,7 +152,7 @@
         <trace>
           <name></name>
           <y_pv>SIM:VIBRATION:EXT</y_pv>
-          <axis>3</axis>
+          <axis>0</axis>
           <trace_type>2</trace_type>
           <color>
             <color red="0" green="0" blue="255">
@@ -289,7 +316,7 @@
             </font>
           </font>
           <foreground_color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
             </color>
           </foreground_color>
           <background_color>
@@ -417,7 +444,20 @@
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
+            </color>
+          </color>
+        </y_axis>
+        <y_axis>
+          <title>LASER:PHASE</title>
+          <autoscale>false</autoscale>
+          <log_scale>false</log_scale>
+          <minimum>-50.0</minimum>
+          <maximum>50.0</maximum>
+          <show_grid>false</show_grid>
+          <visible>true</visible>
+          <color>
+            <color red="0" green="0" blue="255">
             </color>
           </color>
         </y_axis>
@@ -457,7 +497,21 @@
           <axis>2</axis>
           <trace_type>2</trace_type>
           <color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
+            </color>
+          </color>
+          <line_width>2</line_width>
+          <point_type>0</point_type>
+          <point_size>10</point_size>
+          <visible>true</visible>
+        </trace>
+        <trace>
+          <name></name>
+          <y_pv>SIM:LASER:PH_RB</y_pv>
+          <axis>3</axis>
+          <trace_type>2</trace_type>
+          <color>
+            <color red="0" green="0" blue="255">
             </color>
           </color>
           <line_width>2</line_width>
@@ -504,7 +558,7 @@
             <pv_name>$(pv_name)_MODE</pv_name>
           </rule>
         </rules>
-        <increment>0.01</increment>
+        <increment>0.1</increment>
         <enabled>false</enabled>
       </widget>
       <widget type="label" version="2.0.0">
@@ -566,7 +620,7 @@
             <pv_name>$(pv_name)_MODE</pv_name>
           </rule>
         </rules>
-        <increment>0.01</increment>
+        <increment>0.1</increment>
         <enabled>false</enabled>
       </widget>
       <widget type="label" version="2.0.0">
@@ -628,7 +682,7 @@
             <pv_name>$(pv_name)_MODE</pv_name>
           </rule>
         </rules>
-        <increment>0.01</increment>
+        <increment>0.1</increment>
         <enabled>false</enabled>
       </widget>
       <widget type="label" version="2.0.0">
@@ -641,7 +695,7 @@
           </font>
         </font>
         <foreground_color>
-          <color name="Off" red="0" green="100" blue="0">
+          <color name="Off" red="60" green="100" blue="60">
           </color>
         </foreground_color>
         <background_color>
@@ -704,7 +758,7 @@
           <show_grid>false</show_grid>
           <visible>true</visible>
           <color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
             </color>
           </color>
         </y_axis>
@@ -757,7 +811,7 @@
           <axis>2</axis>
           <trace_type>2</trace_type>
           <color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
             </color>
           </color>
           <line_width>2</line_width>
@@ -932,7 +986,7 @@
             </font>
           </font>
           <foreground_color>
-            <color name="Off" red="0" green="100" blue="0">
+            <color name="Off" red="60" green="100" blue="60">
             </color>
           </foreground_color>
           <background_color>
@@ -1075,7 +1129,7 @@
       <horizontal>true</horizontal>
       <rules>
         <rule name="Color Rule" prop_id="fill_color" out_exp="false">
-          <exp bool_exp="pv0&gt;=40 || pv0&lt;=-40">
+          <exp bool_exp="pv0&gt;=30 || pv0&lt;=-30">
             <value>
               <color name="MINOR" red="255" green="128" blue="0">
               </color>
@@ -1453,7 +1507,7 @@
           <value>1</value>
         </action>
       </actions>
-      <pv_name>SIM:START</pv_name>
+      <pv_name>IOC:SIM:START</pv_name>
       <y>17</y>
       <width>95</width>
       <height>18</height>
@@ -1484,7 +1538,7 @@
           <value>0</value>
         </action>
       </actions>
-      <pv_name>SIM:START</pv_name>
+      <pv_name>IOC:SIM:START</pv_name>
       <x>95</x>
       <y>17</y>
       <width>93</width>
@@ -1499,7 +1553,7 @@
         <rule name="Color Rule" prop_id="background_color" out_exp="false">
           <exp bool_exp="pv0==0">
             <value>
-              <color name="Off" red="0" green="100" blue="0">
+              <color name="Off" red="60" green="100" blue="60">
               </color>
             </value>
           </exp>
@@ -1580,7 +1634,7 @@
         <rule name="Color Rule" prop_id="background_color" out_exp="false">
           <exp bool_exp="pv0==0">
             <value>
-              <color name="Off" red="0" green="100" blue="0">
+              <color name="Off" red="60" green="100" blue="60">
               </color>
             </value>
           </exp>
@@ -2080,7 +2134,7 @@
     <x>1015</x>
     <y>602</y>
     <width>192</width>
-    <height>202</height>
+    <height>232</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2174,12 +2228,14 @@
       <y>80</y>
       <width>65</width>
       <height>30</height>
+      <precision>1</precision>
       <background_color>
         <color red="255" green="255" blue="130">
         </color>
       </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
     </widget>
     <widget type="spinner" version="2.0.0">
       <name>Spinner_2</name>
@@ -2188,12 +2244,14 @@
       <y>50</y>
       <width>65</width>
       <height>30</height>
+      <precision>1</precision>
       <background_color>
         <color red="255" green="160" blue="130">
         </color>
       </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
     </widget>
     <widget type="spinner" version="2.0.0">
       <name>Spinner_9</name>
@@ -2202,12 +2260,14 @@
       <y>20</y>
       <width>65</width>
       <height>30</height>
+      <precision>1</precision>
       <background_color>
         <color red="255" green="100" blue="100">
         </color>
       </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
     </widget>
     <widget type="spinner" version="2.0.0">
       <name>Spinner_10</name>
@@ -2216,12 +2276,14 @@
       <y>170</y>
       <width>65</width>
       <height>30</height>
+      <precision>1</precision>
       <background_color>
         <color red="255" green="160" blue="210">
         </color>
       </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
     </widget>
     <widget type="spinner" version="2.0.0">
       <name>Spinner_11</name>
@@ -2230,8 +2292,10 @@
       <y>140</y>
       <width>65</width>
       <height>30</height>
+      <precision>1</precision>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
     </widget>
     <widget type="spinner" version="2.0.0">
       <name>Spinner_12</name>
@@ -2240,12 +2304,14 @@
       <y>110</y>
       <width>65</width>
       <height>30</height>
+      <precision>1</precision>
       <background_color>
         <color red="160" green="255" blue="160">
         </color>
       </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label_55</name>
@@ -2263,6 +2329,36 @@
       <horizontal_alignment>1</horizontal_alignment>
       <vertical_alignment>1</vertical_alignment>
     </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_68</name>
+      <text>PHASE ALIGN</text>
+      <y>200</y>
+      <width>125</width>
+      <height>30</height>
+      <background_color>
+        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="spinner" version="2.0.0">
+      <name>Spinner_13</name>
+      <pv_name>SIM:LASER:K_ALIGN</pv_name>
+      <x>125</x>
+      <y>200</y>
+      <width>65</width>
+      <height>30</height>
+      <precision>1</precision>
+      <background_color>
+        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
+        </color>
+      </background_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+      <increment>0.1</increment>
+    </widget>
   </widget>
   <widget type="action_button" version="3.0.0">
     <name>Action Button_24</name>
@@ -2271,6 +2367,11 @@
         <description>Simulation Reset</description>
         <pv_name>SIM:RESET</pv_name>
         <value>1</value>
+      </action>
+      <action type="write_pv">
+        <description>Write PV</description>
+        <pv_name>SIM:LASER:PH_RB</pv_name>
+        <value>SIM:MO:PHASE</value>
       </action>
     </actions>
     <pv_name>SIM:RESET</pv_name>

@@ -5,6 +5,8 @@
     "LASER:PH_CORR": {"type": "float", "value": 0.0, "egu": "fs"},
     "LASER:PH_DRIFT": {"type": "float", "value": 0.0, "egu": "fs"},
     "LASER:PH_DRIFT_RATE": {"type": "float", "value": 0.0, "egu": "fs/s"},
+    "LASER:K_ALIGN": {"type": "float", "value": 0.1, "egu": "unitless"},
+    "LASER:PH_ERR_WIN": {"type": "float", "value": 45.0, "egu": "fs"},
 
     "MO:PHASE": {"type": "float", "value": 0.0, "egu": "fs"},
     "MO:PHASE_CORRECTION": {"type": "float", "value": 0.0, "egu": "fs"},
@@ -14,8 +16,10 @@
 
     "PLL:CONTROL": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
+    "PLL:FS_PER_VOLT": {"type": "float", "value": 10.0, "egu": "fs/V"},
+    "PLL:OUTPUT_AVG": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:CENTER": {"type": "float", "value": 0.0, "egu": "V"},
-    "PLL:RANGE": {"type": "float", "value": 50.0, "egu": "fs"},
+    "PLL:RANGE": {"type": "float", "value": 45.0, "egu": "fs"},
     "PLL:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
 
     "PID:ENABLE": {"type": "enum", "enums": ["Off", "On"], "value": 1},
@@ -27,13 +31,14 @@
     "PID:Kd_MODE": {"type": "enum", "enums": ["Auto", "Override"], "value": 0},
 
     "PIEZO:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
+    "PIEZO:FS_PER_VOLT": {"type": "float", "value": 5.0, "egu": "fs/V"},
 
     "SENS:POWER": {"type": "float", "value": 10.0, "egu": "fs/%"},
     "SENS:TEMP": {"type": "float", "value": 5.0, "egu": "fs/°C"},
     "SENS:FIBER": {"type": "float", "value": 2.0, "egu": "fs/°C"},
-    "SENS:VIBRATION": {"type": "float", "value": 20.0, "egu": "fs/unit"},
+    "SENS:VIBRATION": {"type": "float", "value": 20.0, "egu": "fs/(m/s²)"},
     "SENS:MO_TEMP": {"type": "float", "value": 2.0, "egu": "fs/°C"},
-    "SENS:PIEZO": {"type": "float", "value": 0.05, "egu": "scale"},
+    "SENS:PIEZO": {"type": "float", "value": 0.05, "egu": "unitless"},
 
     "TEMP:LAB": {"type": "float", "value": 22.0, "egu": "°C"},
     "TEMP:FIBER": {"type": "float", "value": 22.0, "egu": "°C"},

@@ -147,6 +147,14 @@ def monitor_phase_lock():
         pll_output_avg = sum(pll_output_history) / len(pll_output_history)
         pll_output_avg_pv.put(pll_output_avg)
 
+        # **Update Lock Statuses**
+        if abs(phase_error) < pll_range:
+            pll_lock_status_pv.put(1)  # PLL Locked
+            mo_lock_status_pv.put(1)  # MO Locked
+        else:
+            pll_lock_status_pv.put(0)  # PLL Unlocked
+            mo_lock_status_pv.put(0)  # MO Unlocked
+
         # **Beam Dump Condition**
         if abs(phase_error) > pll_range and beam_dump_pv.get() == 0:
             print(f"🚨 Beam Dumped: Phase Error {phase_error} fs exceeded {pll_range} fs!")

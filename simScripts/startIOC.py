@@ -17,13 +17,12 @@ pvdb = {
 # Paths to scripts (fixing the directory issue)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Go one directory up
 
-IOC_SCRIPT = os.path.join(os.path.dirname(__file__), "iocPhaseDriftSim.py")
+IOC_SCRIPT = os.path.join(os.path.dirname(__file__), "ioc.py")
 ENV_SCRIPT = os.path.join(os.path.dirname(__file__), "envSim.py")
 MO_SCRIPT = os.path.join(os.path.dirname(__file__), "moSim.py")
 
 PHASE_SIM_SCRIPT = os.path.join(BASE_DIR, "phase_sim.py")  # Now correctly references the parent directory
 PID_CONTROL_SCRIPT = os.path.join(BASE_DIR, "pid_control.py")
-SIM_MANAGER_SCRIPT = os.path.join(BASE_DIR, "simulation_manager.py")
 
 class IOCStarter(Driver):
     def __init__(self):
@@ -62,14 +61,13 @@ class IOCStarter(Driver):
         self.updatePVs()
 
     def start_laser_simulation(self):
-        """Start the laser simulation scripts (phase_sim.py, pid_control.py, simulation_manager.py)."""
+        """Start the laser simulation scripts (phase_sim.py, pid_control.py)."""
         self.stop_laser_simulation()  # Ensure old processes are stopped before starting new ones
 
 #        print("🚀 Starting Laser Simulation...")
         self.laser_processes = [
             subprocess.Popen(["python3", PHASE_SIM_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE),
             subprocess.Popen(["python3", PID_CONTROL_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE),
-#            subprocess.Popen(["python3", SIM_MANAGER_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE),
         ]
 
         self.setParam("SIM:START", 1)
@@ -115,7 +113,7 @@ def main():
     server.createPV(prefix, pvdb)
     driver = IOCStarter()
     print("✅ IOC Start/Stop Controller Running. Press Ctrl+C to stop.")
-    
+
     while True:
         server.process(1.0)
 

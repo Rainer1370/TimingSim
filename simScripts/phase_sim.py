@@ -157,6 +157,14 @@ def update_laser_phase():
     laser_phase_error_pv.put(phase_error)
     laser_phase_drift_rate_pv.put(phase_change / dt if dt > 0 else 0.0)
 
+    # **Update Lock Statuses**
+    if phase_error <= phase_error_window_deg:
+        pll_lock_status_pv.put(1)  # PLL Locked
+        mo_lock_status_pv.put(1)  # MO Locked
+    else:
+        pll_lock_status_pv.put(0)  # PLL Unlocked
+        mo_lock_status_pv.put(0)  # MO Unlocked
+
     # Trigger beam dump if phase error exceeds dynamic phase window
     if phase_error > phase_error_window_deg:
         print(f"\U0001F6A8 Beam Dumped: Phase Error {phase_error}° exceeded limit {phase_error_window_deg}°")

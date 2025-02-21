@@ -8,6 +8,17 @@
     "LASER:K_ALIGN": {"type": "float", "value": 0.1, "egu": "unitless"},
     "LASER:PH_ERR_WIN": {"type": "float", "value": 45.0, "egu": "fs"},
 
+    "LASER:FREQ": {"type": "float", "value": 1300000000.00, "egu": "Hz"},
+    "LASER:FREQ_SP": {"type": "float", "value": 1300000000.00, "egu": "Hz"},
+    "LASER:FREQ_RB": {"type": "float", "value": 1300000000.00, "egu": "Hz"},
+    "LASER:FREQ_DRIFT": {"type": "float", "value": 0.0, "egu": "Hz/s"},
+    "LASER:FREQ_ERR": {"type": "float", "value": 0.0, "egu": "Hz"},
+    "LASER:FREQ_ERR_WIN": {"type": "float", "value": 10.0, "egu": "Hz"},
+    "LASER:PLL_GAIN": {"type": "float", "value": 0.05, "egu": "unitless"},
+    "LASER:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
+    "LASER:DRIFT_LIMIT": {"type": "float", "value": 100.0, "egu": "fs"},
+    "LASER:PH_CORR_RATE": {"type": "float", "value": 0.1, "egu": "fs/s"},
+
     "MO:PHASE": {"type": "float", "value": 0.0, "egu": "fs"},
     "MO:PHASE_CORRECTION": {"type": "float", "value": 0.0, "egu": "fs"},
     "MO:FREQ": {"type": "float", "value": 162500000.00, "egu": "Hz"},

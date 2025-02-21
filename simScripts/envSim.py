@@ -8,15 +8,24 @@ BASE_TEMP = 22.0  # Average lab temperature in °C
 TEMP_AMPLITUDE = 2.5  # Amplitude of temperature swings
 CYCLE_PERIOD = 86400  # Diurnal cycle period in seconds (24 hours)
 
-# Define the existing PV names
-PV_TEMP_LAB = "SIM:TEMP:LAB"
-PV_TEMP_FIBER = "SIM:TEMP:FIBER"
-PV_VIBRATION_EXT = "SIM:VIBRATION:EXT"
-PV_POWER_STABILITY = "SIM:POWER:STABILITY"
+# PVs required for simulation
+REQUIRED_PVS = ["SIM:TEMP:LAB", "SIM:TEMP:FIBER", "SIM:VIBRATION:EXT", "SIM:POWER:STABILITY"]
+
+def check_ioc_status():
+    """Check if IOC is running and PVs exist."""
+    ioc_status = epics.caget("IOC:STATUS")
+    all_pvs_exist = all(epics.caget(pv) is not None for pv in REQUIRED_PVS)
+    return ioc_status and all_pvs_exist
 
 def update_environmental_factors():
     """Simulates diurnal temperature changes, vibration spikes, and power fluctuations."""
     while True:
+        if not check_ioc_status():
+            print("⏳ IOC is down. Pausing environmental simulation...")
+            while not check_ioc_status():
+                time.sleep(2)  # Wait until IOC comes back
+            print("✅ IOC restored. Resuming simulation...")
+
         try:
             now = datetime.datetime.now()
 
@@ -29,7 +38,7 @@ def update_environmental_factors():
             temp_fiber = temp_lab + np.random.uniform(-0.5, 0.5)  # Fiber temp variation based on Lab Temp
 
             # 🔨 **Realistic Vibration Effects**
-            vibration_ext = epics.caget(PV_VIBRATION_EXT) or 0.0
+            vibration_ext = epics.caget("SIM:VIBRATION:EXT") or 0.0
             vibration_noise = np.random.normal(0, 0.02)  # Small random background noise
 
             # 📌 **5% chance of a construction-related vibration spike**
@@ -37,36 +46,25 @@ def update_environmental_factors():
                 vibration_noise += np.random.uniform(0.2, 0.5)
 
             # 🔄 **Decay Effect: Gradually return vibration to baseline**
-            vibration_ext = max(0, (vibration_ext + vibration_noise) * 0.97)  # Modify decay rate if needed
+            vibration_ext = max(0, (vibration_ext + vibration_noise) * 0.97)
 
             # ⚡ **Power Stability Fluctuations**
-            power_stability = epics.caget(PV_POWER_STABILITY) or 1.0
+            power_stability = epics.caget("SIM:POWER:STABILITY") or 1.0
             power_stability += np.random.uniform(-0.01, 0.01)  # Small random fluctuations
-
-            # 🔄 **Decay Effect: Gradually return to 1.0**
-            power_stability += (1.0 - power_stability) * 0.1
             power_stability = max(0.95, min(1.05, power_stability))  # Keep within [0.95, 1.05]
 
-            # ✅ **Write updates to existing PVs**
-            epics.caput(PV_TEMP_LAB, temp_lab)
-            epics.caput(PV_TEMP_FIBER, temp_fiber)
-            epics.caput(PV_VIBRATION_EXT, vibration_ext)
-            epics.caput(PV_POWER_STABILITY, power_stability)
+            # ✅ **Write updates to PVs**
+            epics.caput("SIM:TEMP:LAB", temp_lab)
+            epics.caput("SIM:TEMP:FIBER", temp_fiber)
+            epics.caput("SIM:VIBRATION:EXT", vibration_ext)
+            epics.caput("SIM:POWER:STABILITY", power_stability)
 
-#            print(f"Updated PVs: {PV_TEMP_LAB}={temp_lab}, {PV_TEMP_FIBER}={temp_fiber}, "
-#                  f"{PV_VIBRATION_EXT}={vibration_ext}, {PV_POWER_STABILITY}={power_stability}")
-
-            time.sleep(1)  # Update every 1 second
+            time.sleep(1)  # Update every second
 
         except Exception as e:
-            print(f"Error occurred during simulation: {e}")
-            time.sleep(5)  # Wait for a bit before retrying
+            print(f"⚠️ Error in envSim.py: {e}")
+            time.sleep(5)  # Wait before retrying
 
-
-# Main execution block
 if __name__ == "__main__":
-    try:
-        print("Starting environmental simulation...")
-        update_environmental_factors()
-    except Exception as e:
-        print(f"Error in main execution: {e}")
+    print("Starting Environmental Simulation...")
+    update_environmental_factors()

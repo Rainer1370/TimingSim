@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-14 14:46:48 by rain-->
+<!--Saved on 2025-02-20 23:06:22 by rain-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
@@ -1507,7 +1507,7 @@
           <value>1</value>
         </action>
       </actions>
-      <pv_name>IOC:SIM:START</pv_name>
+      <pv_name>SIM:START</pv_name>
       <y>17</y>
       <width>95</width>
       <height>18</height>
@@ -1538,7 +1538,7 @@
           <value>0</value>
         </action>
       </actions>
-      <pv_name>IOC:SIM:START</pv_name>
+      <pv_name>SIM:START</pv_name>
       <x>95</x>
       <y>17</y>
       <width>93</width>
@@ -1653,7 +1653,7 @@
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label_25</name>
-      <text>Laser Data</text>
+      <text>Laser Phase Data</text>
       <width>188</width>
       <height>15</height>
       <foreground_color>
@@ -1893,7 +1893,7 @@
   <widget type="group" version="3.0.0">
     <name>Group_3</name>
     <x>1015</x>
-    <y>322</y>
+    <y>744</y>
     <width>190</width>
     <height>47</height>
     <style>2</style>
@@ -1935,7 +1935,7 @@
   <widget type="group" version="3.0.0">
     <name>Group_4</name>
     <x>1015</x>
-    <y>450</y>
+    <y>602</y>
     <width>190</width>
     <height>138</height>
     <style>2</style>
@@ -2131,8 +2131,8 @@
   </widget>
   <widget type="group" version="3.0.0">
     <name>Group</name>
-    <x>1015</x>
-    <y>602</y>
+    <x>11</x>
+    <y>547</y>
     <width>192</width>
     <height>232</height>
     <style>2</style>
@@ -2379,5 +2379,268 @@
     <x>11</x>
     <y>450</y>
     <width>190</width>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_1</name>
+    <x>1015</x>
+    <y>322</y>
+    <width>190</width>
+    <height>178</height>
+    <style>2</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Label_37</name>
+      <text>Laser Frequency Data</text>
+      <width>188</width>
+      <height>15</height>
+      <foreground_color>
+        <color name="Header_ForeGround" red="255" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Header_Background" red="77" green="77" blue="77">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_5</name>
+      <pv_name>SIM:LASER:PH_DRIFT</pv_name>
+      <x>138</x>
+      <y>75</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_46</name>
+      <text>PHASE:DRIFT</text>
+      <y>75</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="255" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_6</name>
+      <pv_name>SIM:LASER:PH_RB</pv_name>
+      <x>138</x>
+      <y>55</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_49</name>
+      <text>PHASE:READBACK</text>
+      <y>55</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="160" blue="130">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_26</name>
+      <pv_name>SIM:PIEZO:OUTPUT</pv_name>
+      <x>138</x>
+      <y>135</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="255" green="160" blue="210">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_65</name>
+      <text>PIEZO:OUTPUT</text>
+      <y>135</y>
+      <width>138</width>
+      <background_color>
+        <color red="255" green="160" blue="210">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_30</name>
+      <pv_name>SIM:LASER:PH_DRIFT_RATE</pv_name>
+      <x>138</x>
+      <y>95</y>
+      <width>50</width>
+      <foreground_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_66</name>
+      <text>PHASE:DRIFT:RATE</text>
+      <y>95</y>
+      <width>138</width>
+      <background_color>
+        <color red="160" green="255" blue="160">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_69</name>
+      <text>PLL:OUTPUT</text>
+      <y>115</y>
+      <width>138</width>
+      <background_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_31</name>
+      <pv_name>SIM:PLL:OUTPUT</pv_name>
+      <x>138</x>
+      <y>115</y>
+      <width>50</width>
+      <foreground_color>
+        <color name="Write_Background" red="128" green="255" blue="255">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_70</name>
+      <text>FREQUENCY</text>
+      <y>16</y>
+      <width>188</width>
+      <background_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_33</name>
+      <pv_name>SIM:PLL:LOCK_STATUS</pv_name>
+      <x>138</x>
+      <y>155</y>
+      <width>50</width>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Text" red="0" green="0" blue="0">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_71</name>
+      <text>PLL:LOCK:STATUS</text>
+      <y>155</y>
+      <width>138</width>
+      <background_color>
+        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_72</name>
+      <text>Hz</text>
+      <x>168</x>
+      <y>36</y>
+      <width>20</width>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_34</name>
+      <pv_name>SIM:LASER:FREQ</pv_name>
+      <y>36</y>
+      <width>168</width>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color red="255" green="100" blue="100">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+      <precision>2</precision>
+      <horizontal_alignment>2</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
   </widget>
 </display>

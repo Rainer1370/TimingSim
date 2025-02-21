@@ -15,7 +15,7 @@
     "LASER:FREQ_ERR": {"type": "float", "value": 0.0, "egu": "Hz"},
     "LASER:FREQ_ERR_WIN": {"type": "float", "value": 10.0, "egu": "Hz"},
     "LASER:PLL_GAIN": {"type": "float", "value": 0.05, "egu": "unitless"},
-    "LASER:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
+    "LASER:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 1},
     "LASER:DRIFT_LIMIT": {"type": "float", "value": 100.0, "egu": "fs"},
     "LASER:PH_CORR_RATE": {"type": "float", "value": 0.1, "egu": "fs/s"},
 
@@ -23,7 +23,7 @@
     "MO:PHASE_CORRECTION": {"type": "float", "value": 0.0, "egu": "fs"},
     "MO:FREQ": {"type": "float", "value": 162500000.00, "egu": "Hz"},
     "MO:FREQ_DRIFT": {"type": "float", "value": 0.0, "egu": "Hz/s"},
-    "MO:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
+    "MO:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 1},
 
     "PLL:CONTROL": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:OUTPUT": {"type": "float", "value": 0.0, "egu": "V"},
@@ -31,7 +31,7 @@
     "PLL:OUTPUT_AVG": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:CENTER": {"type": "float", "value": 0.0, "egu": "V"},
     "PLL:RANGE": {"type": "float", "value": 45.0, "egu": "fs"},
-    "PLL:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 0},
+    "PLL:LOCK_STATUS": {"type": "enum", "enums": ["Unlocked", "Locked"], "value": 1},
 
     "PID:ENABLE": {"type": "enum", "enums": ["Off", "On"], "value": 1},
     "PID:Kp": {"type": "float", "value": 0.1, "egu": "1"},

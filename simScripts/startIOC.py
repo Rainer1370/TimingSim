@@ -20,6 +20,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get current script dire
 IOC_SCRIPT = os.path.join(BASE_DIR, "ioc.py")
 ENV_SCRIPT = os.path.join(BASE_DIR, "envSim.py")
 MO_SCRIPT = os.path.join(BASE_DIR, "moSim.py")
+BEAM_SCRIPT = os.path.join(BASE_DIR, "beam.py")
 
 class IOCStarter(Driver):
     def __init__(self):
@@ -45,11 +46,16 @@ class IOCStarter(Driver):
         self.stop_ioc()  # Ensure old processes are stopped before starting new ones
 
         print("🚀 Starting IOC processes...")
-
-        # Start and track processes
-        self.processes["ioc"] = subprocess.Popen(["python3", IOC_SCRIPT], preexec_fn=os.setpgrp)
-        self.processes["envSim"] = subprocess.Popen(["python3", ENV_SCRIPT], preexec_fn=os.setpgrp)
-        self.processes["moSim"] = subprocess.Popen(["python3", MO_SCRIPT], preexec_fn=os.setpgrp)
+        
+        # Start and track processes only if they are not already running
+        for name, script in {
+            "ioc": IOC_SCRIPT,
+            "envSim": ENV_SCRIPT,
+            "moSim": MO_SCRIPT,
+            "beam": BEAM_SCRIPT
+        }.items():
+            if name not in self.processes or self.processes[name].poll() is not None:
+                self.processes[name] = subprocess.Popen(["python3", script], preexec_fn=os.setpgrp)
 
         self.setParam("STATUS", "IOC Running")
         self.setParam("START", 1)
@@ -60,7 +66,7 @@ class IOCStarter(Driver):
         print("🛑 Stopping IOC processes...")
 
         # **Terminate all tracked processes cleanly**
-        for name, process in self.processes.items():
+        for name, process in list(self.processes.items()):
             if process and process.poll() is None:
                 try:
                     os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send termination signal
@@ -69,7 +75,7 @@ class IOCStarter(Driver):
                 except (subprocess.TimeoutExpired, ProcessLookupError):
                     os.killpg(os.getpgid(process.pid), signal.SIGKILL)  # Force kill if needed
                     print(f"⚠️ {name} required force termination.")
-
+                
         # **Ensure no orphaned processes**
         self._force_kill_processes()
 
@@ -80,7 +86,7 @@ class IOCStarter(Driver):
 
     def _force_kill_processes(self):
         """Forcefully kills any lingering processes related to the IOC."""
-        for script in ["ioc.py", "envSim.py", "moSim.py"]:
+        for script in ["ioc.py", "envSim.py", "moSim.py", "beam.py"]:
             os.system(f"pkill -f 'python3 {script}'")  # Kill process if still running
             os.system(f"pgrep -f 'python3 {script}' | xargs -r kill -9")  # Ensure it's gone
             print(f"🔹 Ensured {script} is terminated.")

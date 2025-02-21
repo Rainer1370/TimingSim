@@ -25,8 +25,8 @@ IOC_PVDB = {
 
 # Paths to simulation scripts
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PHASE_SIM_SCRIPT = os.path.join(BASE_DIR, "phase_sim.py")
-PID_CONTROL_SCRIPT = os.path.join(BASE_DIR, "pid_control.py")
+LASER_SIM_SCRIPT = os.path.join(BASE_DIR, "laserSim.py")
+CONTROL_SCRIPT = os.path.join(BASE_DIR, "control.py")
 
 #========================================================
 class PhaseDriftIOC(Driver):
@@ -52,7 +52,7 @@ class PhaseDriftIOC(Driver):
         self.updatePVs()
 
     def write_pv_list(self):
-        """Writes the PV list to `dbl.txt` with a timestamp."""
+        """Writes the PV list to dbl.txt with a timestamp."""
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         dbl_path = os.path.join(os.path.dirname(__file__), "dbl.txt")
         with open(dbl_path, "w") as f:
@@ -75,8 +75,8 @@ class PhaseDriftIOC(Driver):
         self.stop_simulation()
         print("🚀 Starting Phase Simulation and PID Control...")
         self.simulation_processes = [
-            subprocess.Popen(["python3", PHASE_SIM_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setpgrp),
-            subprocess.Popen(["python3", PID_CONTROL_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setpgrp),
+            subprocess.Popen(["python3", LASER_SIM_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setpgrp),
+            subprocess.Popen(["python3", CONTROL_SCRIPT], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setpgrp),
         ]
         self.setParam("START", 1)
         self.updatePVs()

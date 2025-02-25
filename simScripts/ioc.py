@@ -49,7 +49,7 @@ class PhaseDriftIOC(Driver):
         """Ensures all PVs are initialized with default values."""
         for pv_name, properties in {**PVDB, **IOC_PVDB}.items():
             self.setParam(pv_name, properties.get("value", 0.0))
-        self.updatePVs()
+            self.updatePVs()
 
     def write_pv_list(self):
         """Writes the PV list to dbl.txt with a timestamp."""

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-02-20 23:06:22 by rain-->
+<!--Saved on 2025-02-24 22:36:50 by rain-->
 <display version="2.0.0">
   <name>Timing Simulation</name>
   <macros>
@@ -2385,7 +2385,7 @@
     <x>1015</x>
     <y>322</y>
     <width>190</width>
-    <height>178</height>
+    <height>158</height>
     <style>2</style>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2407,7 +2407,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_5</name>
-      <pv_name>SIM:LASER:PH_DRIFT</pv_name>
+      <pv_name>SIM:LASER:FREQ_RB</pv_name>
       <x>138</x>
       <y>75</y>
       <width>50</width>
@@ -2425,7 +2425,7 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label_46</name>
-      <text>PHASE:DRIFT</text>
+      <text>FREQ:READBACK</text>
       <y>75</y>
       <width>138</width>
       <background_color>
@@ -2438,7 +2438,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_6</name>
-      <pv_name>SIM:LASER:PH_RB</pv_name>
+      <pv_name>SIM:LASER:FREQ_SP</pv_name>
       <x>138</x>
       <y>55</y>
       <width>50</width>
@@ -2456,7 +2456,7 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label_49</name>
-      <text>PHASE:READBACK</text>
+      <text>FREQ:SETPOINT</text>
       <y>55</y>
       <width>138</width>
       <background_color>
@@ -2469,7 +2469,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_26</name>
-      <pv_name>SIM:PIEZO:OUTPUT</pv_name>
+      <pv_name>SIM:LASER:FREQ_ERR_WIN</pv_name>
       <x>138</x>
       <y>135</y>
       <width>50</width>
@@ -2487,7 +2487,7 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label_65</name>
-      <text>PIEZO:OUTPUT</text>
+      <text>FREQ:ERROR_WIN</text>
       <y>135</y>
       <width>138</width>
       <background_color>
@@ -2500,7 +2500,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_30</name>
-      <pv_name>SIM:LASER:PH_DRIFT_RATE</pv_name>
+      <pv_name>SIM:LASER:FREQ_DRIFT</pv_name>
       <x>138</x>
       <y>95</y>
       <width>50</width>
@@ -2518,7 +2518,7 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label_66</name>
-      <text>PHASE:DRIFT:RATE</text>
+      <text>FREQ:DRIFT</text>
       <y>95</y>
       <width>138</width>
       <background_color>
@@ -2531,7 +2531,7 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label_69</name>
-      <text>PLL:OUTPUT</text>
+      <text>FREQ:ERROR</text>
       <y>115</y>
       <width>138</width>
       <background_color>
@@ -2544,7 +2544,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update_31</name>
-      <pv_name>SIM:PLL:OUTPUT</pv_name>
+      <pv_name>SIM:LASER:FREQ_ERR</pv_name>
       <x>138</x>
       <y>115</y>
       <width>50</width>
@@ -2567,41 +2567,6 @@
       <width>188</width>
       <background_color>
         <color red="255" green="100" blue="100">
-        </color>
-      </background_color>
-      <transparent>false</transparent>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>Text Update_33</name>
-      <pv_name>SIM:PLL:LOCK_STATUS</pv_name>
-      <x>138</x>
-      <y>155</y>
-      <width>50</width>
-      <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-        </font>
-      </font>
-      <foreground_color>
-        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
-        </color>
-      </foreground_color>
-      <background_color>
-        <color name="Text" red="0" green="0" blue="0">
-        </color>
-      </background_color>
-      <precision>2</precision>
-      <horizontal_alignment>1</horizontal_alignment>
-      <vertical_alignment>1</vertical_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label_71</name>
-      <text>PLL:LOCK:STATUS</text>
-      <y>155</y>
-      <width>138</width>
-      <background_color>
-        <color name="DISCONNECTED" red="200" green="0" blue="200" alpha="200">
         </color>
       </background_color>
       <transparent>false</transparent>

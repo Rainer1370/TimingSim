@@ -5,6 +5,11 @@ import threading
 import signal
 import sys
 
+print("⏳ Waiting for IOC to initialize...")
+time.sleep(2)  # Delay to ensure PVs are initialized
+epics.caput("SIM:BEAM:RESET", 0)  # ✅ Added quotes around PV name
+print("✅ IOC should be ready. Starting beam monitoring...")
+
 def safe_caget(pv_name, default=None):
     try:
         return epics.caget(pv_name) or default
@@ -60,6 +65,7 @@ def reset_beam():
         # Reset phases and outputs
         safe_caput("SIM:LASER:PH_SP", 0.0)  # Default laser phase setpoint
         safe_caput("SIM:LASER:PH_RB", 0.0)  # Default laser phase readback
+        safe_caput("SIM:LASER:PH_ERROR", 0.0)  # Default laser phase error
         safe_caput("SIM:MO:PHASE", 0.0)     # Default master oscillator phase
         safe_caput("SIM:MO:PHASE_CORRECTION", 0.0)  # Default phase correction
         safe_caput("SIM:PLL:OUTPUT", 0.0)   # Default PLL output

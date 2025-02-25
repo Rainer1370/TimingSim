@@ -4,16 +4,11 @@ import epics  # Use EPICS caget/caput for PV access
 from simple_pid import PID
 
 # Initialize PID controller for phase correction
-pid = PID(0.15, 0.015, 0.005, setpoint=0.0)  # More stable gains
+pid = PID(0.1, 0.01, 0.01, setpoint=0.0)
 pid.sample_time = 1.0  # Run every second
-pid.output_limits = (-5.0, 5.0)  # Limit output for controlled response
 
 # Rolling average buffer for PLL Output Voltage
 pll_output_history = []
-
-# Limits for max phase step changes (Smooth control)
-MAX_PHASE_STEP = 2.0  # Laser phase change per update (fs)
-DECAY_FACTOR = 0.9  # Slows correction response over time
 
 def update_pid_gains(laser_phase_error, piezo_output):
     """Dynamically adjusts PID gains based on laser phase error and piezo response, unless overridden."""
@@ -21,28 +16,26 @@ def update_pid_gains(laser_phase_error, piezo_output):
     ki_mode = epics.caget("SIM:PID:Ki_MODE") or 0
     kd_mode = epics.caget("SIM:PID:Kd_MODE") or 0
 
-    kp = epics.caget("SIM:PID:Kp") or 0.15
-    ki = epics.caget("SIM:PID:Ki") or 0.015
-    kd = epics.caget("SIM:PID:Kd") or 0.005
+    kp = epics.caget("SIM:PID:Kp") or 0.1
+    ki = epics.caget("SIM:PID:Ki") or 0.01
+    kd = epics.caget("SIM:PID:Kd") or 0.01
 
-    # Adaptive PID tuning if not overridden
     if kp_mode == 0:
-        kp = max(0.05, min(kp + (0.002 if abs(laser_phase_error) > 2.0 else -0.001), 5.0))
+        kp += 0.01 if abs(laser_phase_error) > 1.0 else -0.005
+        kp = max(0.05, min(kp, 5.0))
+        epics.caput("SIM:PID:Kp", kp)
 
     if ki_mode == 0:
-        ki = max(0.001, min(ki + (0.001 if abs(piezo_output) > 0.5 else -0.0005), 1.0))
+        ki += 0.001 if abs(piezo_output) > 0.5 else -0.0005
+        ki = max(0.001, min(ki, 1.0))
+        epics.caput("SIM:PID:Ki", ki)
 
     if kd_mode == 0:
-        kd = max(0.001, min(kd + (0.001 if abs(laser_phase_error) > 3.0 else -0.0005), 1.0))
+        kd += 0.002 if abs(laser_phase_error) > 2.0 else -0.001
+        kd = max(0.001, min(kd, 1.0))
+        epics.caput("SIM:PID:Kd", kd)
 
-    # Apply new PID gains
     pid.tunings = (kp, ki, kd)
-
-    # Store updated PID gains in PVs
-    epics.caput("SIM:PID:Kp", kp)
-    epics.caput("SIM:PID:Ki", ki)
-    epics.caput("SIM:PID:Kd", kd)
-
 
 def apply_pll_pid_control():
     """Locks Laser Phase to MO Phase using PID and PLL control."""
@@ -60,12 +53,10 @@ def apply_pll_pid_control():
         # Get MO Phase and Laser Phase
         mo_phase = epics.caget("SIM:MO:PHASE") or 0.0
         laser_phase = epics.caget("SIM:LASER:PH_RB") or 0.0
-        pll_range = epics.caget("SIM:PLL:RANGE") or 10.0  # Tight lock range
+        pll_range = epics.caget("SIM:PLL:RANGE") or 50.0  # Lock range in fs
 
-        # Calculate Phase Error (bounded within ±180)
-        phase_error = (laser_phase - mo_phase) % 360
-        phase_error = phase_error if phase_error < 180 else phase_error - 360
-
+        # Calculate Phase Error
+        phase_error = laser_phase - mo_phase
         epics.caput("SIM:LASER:PH_ERROR", phase_error)
 
         # Convert Voltage to fs
@@ -80,26 +71,12 @@ def apply_pll_pid_control():
         pll_correction_fs = pll_voltage * pll_fs_per_volt
 
         # Compute PID Correction
-        update_pid_gains(phase_error, piezo_voltage)  # Update PID before applying corrections
         correction = pid(phase_error)
-
-        # Smooth correction over time
-        correction *= DECAY_FACTOR
-
-        # Split correction between Piezo and PLL
-        pll_correction = correction * 0.6  # Faster PLL response
-        piezo_correction = correction * 0.4  # Slower Piezo correction
-
-        # Ensure phase corrections are limited to MAX_PHASE_STEP
-        pll_correction = np.clip(pll_correction, -MAX_PHASE_STEP, MAX_PHASE_STEP)
-        piezo_correction = np.clip(piezo_correction, -MAX_PHASE_STEP, MAX_PHASE_STEP)
-
-        # Apply corrections and update EPICS PVs
-        epics.caput("SIM:PIEZO:OUTPUT", piezo_voltage + piezo_correction)
-        epics.caput("SIM:PLL:OUTPUT", pll_voltage + pll_correction)
+        epics.caput("SIM:PIEZO:OUTPUT", correction)
+        epics.caput("SIM:PLL:OUTPUT", correction)
 
         # Track PLL Output Voltage for Centering
-        pll_output_history.append(pll_correction)
+        pll_output_history.append(correction)
         if len(pll_output_history) > 20:  # Track last 20 values
             pll_output_history.pop(0)
 
@@ -116,7 +93,7 @@ def apply_pll_pid_control():
             epics.caput("SIM:PLL:LOCK_STATUS", 0)  # PLL Unlocked
             epics.caput("SIM:MO:LOCK_STATUS", 0)  # MO Unlocked
             epics.caput("SIM:LASER:LOCK_STATUS", 0)  # Laser Unlocked
-            epics.caput("SIM:BEAM:DUMP", 1)  # Trigger beam dump if out of phase
+            # No beam dump logic here! Beam.py handles this.
 
         time.sleep(1)
 

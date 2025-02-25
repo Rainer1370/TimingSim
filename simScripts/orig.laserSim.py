@@ -12,16 +12,22 @@ VIBRATION_SENSITIVITY = 5e-12  # Reduced vibration sensitivity (m/m)
 POWER_SENSITIVITY = 0.0005  # Power fluctuation impact factor
 FIBER_LENGTH = 1000.0  # Fiber length in meters
 
-# Drift and Noise Control
-DRIFT_DECAY = 0.999  # Slows down long-term drift accumulation
-NOISE_SCALE = 0.0003  # Even smaller noise for fine-tuning
-PHASE_STEP_LIMIT = 2.0  # Limits the maximum phase shift per step
-SMOOTHING_FACTOR = 0.85  # Exponential smoothing to prevent rapid changes
+# Drift Dynamics
+DRIFT_DECAY = 0.9995  # Very slow accumulation of drift
+NOISE_SCALE = 0.0005  # Small random fluctuations
+PHASE_CORRECTION_SCALE = 0.02  # Softens effect of corrections
+MAX_PHASE_STEP = 2.0  # 🔹 **Limits phase jump per step to ±5 fs**
+LASER_PHASE_RANGE = 360 / HARMONIC_FACTOR  # 🔹 **Laser phase range is 45 degrees**
+
 
 def calculate_environmental_drift(previous_drift):
     """
     Calculate phase drift due to temperature, vibration, and power fluctuations.
+
+    Returns:
+        float: Total phase drift in femtoseconds (fs).
     """
+    # Retrieve environmental values from EPICS PVs (provided by envSim.py)
     fiber_temp = epics.caget("SIM:TEMP:FIBER") or 22.0  # Fiber temperature in °C
     lab_temp = epics.caget("SIM:TEMP:LAB") or 22.0  # Lab ambient temperature in °C
     vibration = epics.caget("SIM:VIBRATION:EXT") or 0.002  # External vibration amplitude
@@ -32,35 +38,52 @@ def calculate_environmental_drift(previous_drift):
     vibration_drift = VIBRATION_SENSITIVITY * FIBER_LENGTH * vibration * 1e15  # Convert to fs
     power_drift = POWER_SENSITIVITY * power_stability * 1e15  # Convert to fs
 
-    # Exponential smoothing to stabilize drift
-    total_drift = (previous_drift * DRIFT_DECAY) + (temp_drift + vibration_drift + power_drift) * (1 - DRIFT_DECAY)
+    # Gradual phase drift with leaky integration
+    drift_factor = previous_drift * DRIFT_DECAY  # Slow accumulation of drift
+    total_drift = drift_factor + temp_drift + vibration_drift + power_drift
 
     return total_drift
 
+
 def initialize_laser():
-    """ Initialize laser PVs with proper values. """
+    """
+    Initialize laser PVs with proper values.
+
+    Notes:
+        - Sets the laser frequency to 8x the MO frequency.
+        - Initializes the laser phase to match the MO phase.
+        - Assumes the laser is locked initially.
+    """
     mo_freq = epics.caget("SIM:MO:FREQ") or 162500000.0  # Default MO frequency (Hz)
     laser_freq = mo_freq * HARMONIC_FACTOR  # Calculate laser frequency
 
     # Fetch initial MO phase
     mo_phase = epics.caget("SIM:MO:PHASE") or 0.0
+    laser_phase = (HARMONIC_FACTOR * mo_phase) % LASER_PHASE_RANGE  # 🔹 Constrain laser phase
 
     # Set frequency and phase-related PVs
     epics.caput("SIM:LASER:FREQ", laser_freq)
     epics.caput("SIM:LASER:FREQ_SP", laser_freq)
     epics.caput("SIM:LASER:FREQ_RB", laser_freq)
 
-    # Set laser phase to initially match MO phase
-    epics.caput("SIM:LASER:PH_SP", mo_phase)
-    epics.caput("SIM:LASER:PH_RB", mo_phase)
+    # Set laser phase to initially match MO phase within the valid range
+    epics.caput("SIM:LASER:PH_SP", laser_phase)
+    epics.caput("SIM:LASER:PH_RB", laser_phase)
 
     # Initialize lock status
     epics.caput("SIM:LASER:LOCK_STATUS", 1)  # Assume locked initially
 
-    print(f"✅ Laser Initialized: Freq {laser_freq / 1e6:.2f} MHz | Phase Synced to MO ({mo_phase:.2f} fs)")
+    print(f"✅ Laser Initialized: Freq {laser_freq / 1e6:.2f} MHz | Phase Synced to MO ({laser_phase:.2f} fs)")
+
 
 def update_laser_phase():
-    """ Simulate laser phase drift and apply corrections from the PLL and Piezo system. """
+    """
+    Simulate laser phase drift and apply corrections from the PLL and Piezo system.
+
+    Notes:
+        - Continuously updates the laser phase based on environmental drift and corrections.
+        - Updates the laser lock status and triggers a beam dump if the phase error exceeds the window.
+    """
     previous_drift = 0.0  # Initialize drift memory
 
     while True:
@@ -74,7 +97,7 @@ def update_laser_phase():
 
         # Calculate expected laser frequency & phase
         laser_freq = mo_freq * HARMONIC_FACTOR
-        target_phase = (HARMONIC_FACTOR * mo_phase) % 360
+        target_phase = (HARMONIC_FACTOR * mo_phase) % LASER_PHASE_RANGE  # 🔹 Constrain laser phase range
 
         # Fetch current laser phase
         laser_phase = epics.caget("SIM:LASER:PH_RB") or target_phase
@@ -83,37 +106,40 @@ def update_laser_phase():
         phase_drift = calculate_environmental_drift(previous_drift)
         noise = np.random.normal(0, NOISE_SCALE)  # Small Gaussian noise
         total_drift = phase_drift + noise
-
-        # Prevent large phase jumps
-        total_drift = np.clip(total_drift, -PHASE_STEP_LIMIT, PHASE_STEP_LIMIT)
+        previous_drift = phase_drift  # Update drift memory
 
         # Apply correction from PLL & Piezo
         pll_correction = epics.caget("SIM:PLL:OUTPUT") or 0.0
         piezo_correction = epics.caget("SIM:PIEZO:OUTPUT") or 0.0
-        correction = (pll_correction + piezo_correction) * 0.7  # Slightly reduce correction effect
+        correction = pll_correction + piezo_correction
 
-        # Apply smoothing to phase updates
-        updated_phase = (laser_phase + total_drift - correction) * SMOOTHING_FACTOR + laser_phase * (1 - SMOOTHING_FACTOR)
+        # Compute new phase shift with limited step size
+        phase_shift = (total_drift - correction) * PHASE_CORRECTION_SCALE
 
-        # Keep phase within 1/8th of 360 degrees (as laser is 8th harmonic of MO)
-        updated_phase = (updated_phase % 360) / HARMONIC_FACTOR
+        # **🔹 Clamp phase change to prevent extreme jumps**
+        phase_shift = max(-MAX_PHASE_STEP, min(phase_shift, MAX_PHASE_STEP))
+
+        # Update laser phase with constrained range
+        laser_phase = (laser_phase + phase_shift) % LASER_PHASE_RANGE
+
+        # Calculate phase error
+        phase_error = abs(laser_phase - target_phase)
 
         # Update PVs
-        epics.caput("SIM:LASER:PH_RB", updated_phase)
-        epics.caput("SIM:LASER:PH_ERROR", abs(updated_phase - target_phase))
+        epics.caput("SIM:LASER:PH_RB", laser_phase)
+        epics.caput("SIM:LASER:PH_ERROR", phase_error)
         epics.caput("SIM:LASER:FREQ_RB", laser_freq)
 
         # Update Lock Status
-        phase_error_window = epics.caget("SIM:LASER:PH_ERR_WIN") or 10.0
-        if abs(updated_phase - target_phase) <= phase_error_window:
+        phase_error_window = epics.caget("SIM:LASER:PH_ERR_WIN") or 10.0  # Tightened error threshold
+        if phase_error <= phase_error_window:
             epics.caput("SIM:LASER:LOCK_STATUS", 1)  # Laser Locked
         else:
             epics.caput("SIM:LASER:LOCK_STATUS", 0)  # Laser Unlocked
             epics.caput("SIM:BEAM:DUMP", 1)  # Trigger beam dump if unlocked
 
-        previous_drift = total_drift  # Store for next iteration
-
         time.sleep(1)  # Update at 1 Hz
+
 
 if __name__ == "__main__":
     print("✅ Laser Phase Simulation Waiting for Start Signal...")

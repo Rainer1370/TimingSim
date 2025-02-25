@@ -5,7 +5,12 @@ The **Timing Drift Simulation Tool** is an **EPICS-based** simulation designed t
 
 This tool provides:
 - A **soft IOC** managing simulated phase drift, environmental conditions, and beam stability.
-  - soft IOC runs in python without needing full EPICS build
+  - The soft IOC runs in Python without needing a full EPICS build.
+- **Separate simulation scripts** for different system components:
+  - `envSim.py`: Simulates environmental effects on phase drift.
+  - `moSim.py`: Models the Master Oscillator (MO) response.
+  - `laserSim.py`: Simulates laser phase behavior and drift.
+  - `beam.py`: Handles beam stability and beam dump logic.
 - A **Phoebus GUI** for visualization and manual tuning.
 - A **PID control loop** that dynamically adjusts gains to stabilize phase error.
 - Override modes to allow manual adjustments to PID parameters.
@@ -16,7 +21,7 @@ This tool provides:
 ✅ **Fully integrated Phoebus GUI** for monitoring & control  
 ✅ **Adaptive PID loop** for automatic phase stabilization  
 ✅ **Manual override** of PID gains when needed  
-✅ **Fun toys** for simulated Earthquakes and Power Dips  
+✅ **Simulated Environmental Effects** such as temperature changes and vibrations  
 ✅ **Beam dump logic** triggered by excessive phase drift  
 
 ## Installation & Setup
@@ -40,15 +45,19 @@ Ensure `pcaspy`, `pyepics`, `numpy`, and `simple-pid` are installed.
 
 ### **4. Start the EPICS Soft IOC**
 ```bash
-python simScripts/iocs/iocPhaseDriftSim.py
+python simScripts/startIOC.py
 ```
 This starts the **EPICS Soft IOC**, initializing all PVs and starting the simulation.
 
-### **5. Start the PID Control Loop**
+### **5. Start the Simulation Scripts**
 ```bash
-python simScripts/pid_control.py
+python simScripts/envSim.py &
+python simScripts/moSim.py &
+python simScripts/laserSim.py &
+python simScripts/beam.py &
+python simScripts/control.py &
 ```
-This script applies the **PID corrections** to stabilize phase drift.
+These scripts simulate different components of the timing system.
 
 ### **6. Launch the Phoebus GUI**
 Open Phoebus and load the GUI file:
@@ -57,15 +66,15 @@ phoebus gui.bob
 ```
 
 ## Running the Simulation
-1. **Start the IOC** (`iocPhaseDriftSim.py`)
-2. **Start the PID Controller** (`pid_control.py`)
+1. **Start the IOC** (`startIOC.py`)
+2. **Start all simulation components** (`envSim.py`, `moSim.py`, `laserSim.py`, `beam.py`, `control.py`)
 3. **Launch the GUI in Phoebus**
 4. Click **Start Simulation** to begin the phase drift correction process.
 
 ## How the PID Control Works
-- The **PID loop** adjusts the **Piezo Output** based on `SIM:PHASE:ERROR`
+- The **PID loop** adjusts the **Piezo Output** based on `SIM:LASER:PH_ERROR`
 - The **Proportional (Kp), Integral (Ki), and Derivative (Kd) gains** dynamically adapt based on:
-  - Phase error size
+  - Phase error magnitude
   - Piezo output activity
   - Detection of oscillations
 - Gains are **auto-adjusted** unless set to **Override Mode**
@@ -104,7 +113,7 @@ phoebus gui.bob
 
 ## Troubleshooting & FAQs
 **Q: The simulation isn’t updating PV values.**  
-✅ Ensure the **IOC is running** (`iocPhaseDriftSim.py`)
+✅ Ensure the **IOC is running** (`startIOC.py`)
 
 **Q: PID gains don’t update in Auto Mode.**  
 ✅ Check `SIM:PID:Kp_MODE`, `SIM:PID:Ki_MODE`, `SIM:PID:Kd_MODE` (should be `0` for Auto)

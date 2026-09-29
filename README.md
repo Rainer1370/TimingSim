@@ -110,6 +110,9 @@ legacy display after changing the visual theme in the script.
 ### Refreshed Phoebus operator display
 ![Refreshed Phoebus timing operator display with simulation running](bobs/assets/TimingSimPhoebusOperator.png)
 
+### Beam dump state
+![Refreshed Phoebus timing display after a simulated beam dump](bobs/assets/TimingSimPhoebusBeamDump.png)
+
 This is a native Phoebus capture of `bobs/gui.bob` with the simulation IOC
 running. The clock and separate IOC start/stop server were not connected in
 the capture environment, so those fields show Phoebus's disconnected state.

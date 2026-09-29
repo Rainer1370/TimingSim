@@ -70,6 +70,12 @@ display uses the same PV bindings, actions, alarm rules, widgets, and plot
 traces. Run `python scripts/refresh_phoebus.py` to regenerate it from the
 legacy display after changing the visual theme in the script.
 
+For the compact status page, open `bobs/status-modern.bob` in Phoebus. It shows
+the live `SIM:LASER:PH_ERROR` readback, beam dump state, and the existing beam
+reset write. The old `bobs/status.bob` is retained for reference; it uses an
+older display schema and references `SIM:PHASE:ERROR`, which is not in this
+simulation's PV database.
+
 ## Running the Simulation
 1. **Start the IOC** (`startIOC.py`)
 2. **Start all simulation components** (`envSim.py`, `moSim.py`, `laserSim.py`, `beam.py`, `control.py`)
@@ -112,6 +118,9 @@ legacy display after changing the visual theme in the script.
 
 ### Beam dump state
 ![Refreshed Phoebus timing display after a simulated beam dump](bobs/assets/TimingSimPhoebusBeamDump.png)
+
+### Compact status page
+![Compact Phoebus timing status page](bobs/assets/TimingSimPhoebusStatus.png)
 
 This is a native Phoebus capture of `bobs/gui.bob` with the simulation IOC
 running. The clock and separate IOC start/stop server were not connected in

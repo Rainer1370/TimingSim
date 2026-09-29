@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display version="2.0.0">
+  <name>Timing Simulation · Status</name>
+  <width>680</width>
+  <height>365</height>
+  <background_color><color red="232" green="240" blue="244" /></background_color>
+  <widget type="label" version="2.0.0">
+    <name>Title</name><text>Timing System Status</text>
+    <x>0</x><y>0</y><width>680</width><height>64</height>
+    <font><font family="Liberation Sans" style="BOLD" size="24.0" /></font>
+    <foreground_color><color red="242" green="250" blue="252" /></foreground_color>
+    <background_color><color red="13" green="42" blue="57" /></background_color>
+    <transparent>false</transparent><horizontal_alignment>1</horizontal_alignment><vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Phase Label</name><text>Phase error</text>
+    <x>32</x><y>100</y><width>250</width><height>32</height>
+    <font><font family="Liberation Sans" style="BOLD" size="17.0" /></font>
+    <foreground_color><color red="25" green="53" blue="67" /></foreground_color>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Phase Error</name><pv_name>SIM:LASER:PH_ERROR</pv_name>
+    <x>315</x><y>92</y><width>310</width><height>48</height>
+    <font><font family="Liberation Sans" style="BOLD" size="22.0" /></font>
+    <foreground_color><color red="13" green="126" blue="143" /></foreground_color>
+    <background_color><color red="250" green="253" blue="254" /></background_color>
+    <transparent>false</transparent><precision>2</precision>
+    <horizontal_alignment>1</horizontal_alignment><vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Beam Label</name><text>Beam status</text>
+    <x>32</x><y>174</y><width>250</width><height>32</height>
+    <font><font family="Liberation Sans" style="BOLD" size="17.0" /></font>
+    <foreground_color><color red="25" green="53" blue="67" /></foreground_color>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Beam Dump Readback</name><pv_name>SIM:BEAM:DUMP</pv_name>
+    <x>315</x><y>166</y><width>310</width><height>48</height>
+    <font><font family="Liberation Sans" style="BOLD" size="22.0" /></font>
+    <foreground_color><color red="13" green="126" blue="143" /></foreground_color>
+    <background_color><color red="250" green="253" blue="254" /></background_color>
+    <transparent>false</transparent><horizontal_alignment>1</horizontal_alignment><vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Reset Beam</name><text>Reset Beam</text><pv_name>SIM:BEAM:RESET</pv_name>
+    <x>315</x><y>260</y><width>310</width><height>52</height>
+    <font><font family="Liberation Sans" style="BOLD" size="17.0" /></font>
+    <foreground_color><color red="255" green="255" blue="255" /></foreground_color>
+    <background_color><color red="35" green="94" blue="124" /></background_color>
+    <actions><action type="write_pv"><description>Reset Beam</description><pv_name>SIM:BEAM:RESET</pv_name><value>1</value></action></actions>
+  </widget>
+</display>

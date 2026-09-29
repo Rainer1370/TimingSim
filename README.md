@@ -60,10 +60,15 @@ python simScripts/control.py &
 These scripts simulate different components of the timing system.
 
 ### **6. Launch the Phoebus GUI**
-Open Phoebus and load the GUI file:
+Open Phoebus and load the updated GUI file:
 ```bash
-phoebus gui.bob
+phoebus bobs/gui.bob
 ```
+
+The previous display is retained as `bobs/gui-legacy.bob`. The refreshed
+display uses the same PV bindings, actions, alarm rules, widgets, and plot
+traces. Run `python scripts/refresh_phoebus.py` to regenerate it from the
+legacy display after changing the visual theme in the script.
 
 ## Running the Simulation
 1. **Start the IOC** (`startIOC.py`)
@@ -102,6 +107,14 @@ phoebus gui.bob
 3. **Disable Override Mode** to return to auto-adjustment.
 
 ## GUI Screenshots
+### Refreshed Phoebus operator display
+![Refreshed Phoebus timing operator display with simulation running](bobs/assets/TimingSimPhoebusOperator.png)
+
+This is a native Phoebus capture of `bobs/gui.bob` with the simulation IOC
+running. The clock and separate IOC start/stop server were not connected in
+the capture environment, so those fields show Phoebus's disconnected state.
+
+The original captures remain below for comparison.
 ### **Live Simulation Running:**
 ![Timing Live Simulation](bobs/assets/TimingLiveSim.png)
 
